@@ -18,7 +18,8 @@ const Header = () => {
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-md px-4 md:px-8 sticky top-0 z-50">
+    <div className="navbar bg-base-100 shadow-xl px-4 md:px-8 sticky top-0 z-50">
+      <div >
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -28,7 +29,7 @@ const Header = () => {
             {navLinks}
           </ul>
         </div>
-        <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+        <Link href="/" className="flex items-center gap-2 text-2xl font-bold ">
           <FaHandHoldingHeart className="text-2xl" />
           <span className="hidden sm:inline">Care.Bridge</span>
         </Link>
@@ -62,6 +63,7 @@ const Header = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { FaHandHoldingHeart } from 'react-icons/fa6';
 
 const Footer = () => {
   return (
-    <footer className="bg-base-200 text-base-content border-t border-base-300">
+    <footer className="bg-neutral text-base-100 border-t border-base-300">
       <div className="container mx-auto px-4 py-10">
         <div className="footer grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
