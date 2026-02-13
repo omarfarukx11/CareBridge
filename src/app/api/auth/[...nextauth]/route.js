@@ -21,7 +21,6 @@ export const authOptions = {
         if (!isPasswordMatched) {
           throw new Error("Invalid password");
         }
-
         return user;
       },
     }),

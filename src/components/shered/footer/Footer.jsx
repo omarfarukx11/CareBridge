@@ -1,9 +1,12 @@
 "use client";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import { FaHandHoldingHeart } from 'react-icons/fa6';
 
 const Footer = () => {
+  const pathname = usePathname();
+  if (pathname.startsWith("/register") ||pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
   return (
     <footer className="bg-neutral text-base-100 border-t border-base-300">
       <div className="container mx-auto px-4 py-10">
