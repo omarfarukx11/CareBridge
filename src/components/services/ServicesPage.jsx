@@ -6,7 +6,7 @@ const ServicesPage = ({services}) => {
 
   return (
     <div className="min-h-screen py-12 px-4 md:px-12">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-360 mx-auto">
         
 
         <div className="text-center mb-16">
@@ -40,10 +40,10 @@ const ServicesPage = ({services}) => {
 
                 <div className="mb-6">
                   <span className="text-sm text-gray-400">Starting from</span>
-                  <p className="text-2xl font-bold text-gray-800">৳ {service.price} <span className="text-sm font-normal text-gray-500">/ session</span></p>
+                  <p className="text-2xl font-bold text-gray-800">৳ {service.price_per_unit} <span className="text-sm font-normal text-gray-500">/ session</span></p>
                 </div>
                 <div className="card-actions justify-end flex-nowrap gap-2">
-                  <Link href={`/services/${service._id}`} className="btn bg-green-700 flex-1">
+                  <Link href={`/services/${service._id}`} className="btn btn-primary flex-1">
                     Details
                   </Link>
                 </div>
