@@ -1,26 +1,19 @@
-import { NextResponse } from "next/server";
-
+'use server'
 import { dbConnect } from "@/lib/dbConnect";
 
-
-
-
-export async function POST(request) {
+export async function createBooking(data) {
   try {
-    const booking = await request.json();
+
     const collection = dbConnect("bookings");
-    const result = await collection.insertOne(booking);
+    
+    const result = await collection.insertOne({
+      ...data,
+      order_date: new Date().toISOString(),
+      status: "Pending"
+    });
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "Booking saved to MongoDB",
-      id: result.insertedId 
-    }, { status: 201 });
-
+    return { success: true, id: result.insertedId.toString() };
   } catch (error) {
-    console.error("Database Error:", error);
-    return NextResponse.json({ error: "Failed to save booking" }, { status: 500 });
-  } finally {
-
+    return { success: false, error: error.message };
   }
 }

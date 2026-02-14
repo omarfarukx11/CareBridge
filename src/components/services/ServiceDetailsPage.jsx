@@ -1,114 +1,124 @@
 "use client";
-import React, { useState } from "react";
-import { useSession } from "next-auth/react"; // Added
-import { useRouter, usePathname } from "next/navigation"; // Added
-import { FaCalendarCheck } from "react-icons/fa";
+import React, { useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FaClock, FaMapMarkerAlt, FaArrowRight, FaShieldAlt, FaCheckCircle } from "react-icons/fa";
+import Swal from "sweetalert2";
+import locationsData from "@/lib/area.json";
+import { createBooking } from "@/action/server/bookings";
+
 
 const ServiceDetailsPage = ({ service }) => {
-  const { data: session } = useSession(); // Get user session
+  const { data: session } = useSession();
   const router = useRouter();
-  const pathname = usePathname(); // Get current page URL
-
-  const [bookingData, setBookingData] = useState({
-    duration: 1,
-    address: "",
-    area: "",
-    city: "",
+  
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
+    defaultValues: {
+      duration: 1,
+      startTime: "09:00",
+      startDate: new Date().toISOString().split('T')[0]
+    }
   });
 
-  const totalCost = service ? service.price_per_unit * bookingData.duration : 0;
+  const selectedDivision = watch("division");
+  const selectedDistrict = watch("district");
 
-  // Function to handle the "Book Appointment" button click
-  const handleOpenModal = () => {
-    if (!session) {
-      // If no user, redirect to login with this page as the return destination
-      router.push(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
+  const divisions = useMemo(() => [...new Set(locationsData.map(l => l.region))], []);
+  const filteredDistricts = useMemo(() => 
+    locationsData.filter(l => l.region === selectedDivision), [selectedDivision]);
+  const filteredAreas = useMemo(() => 
+    filteredDistricts.find(d => d.district === selectedDistrict)?.covered_area || [], [selectedDistrict, filteredDistricts]);
+
+  const onSubmit = async (data) => {
+    if (!session) return router.push("/login");
+
+    Swal.fire({ title: "Processing...", didOpen: () => Swal.showLoading() });
+
+    const totalCost = (service?.hourly_rate || 0) * data.duration;
+    
+    const result = await createBooking({
+      ...data,
+      service_id: service?._id,
+      service_title: service?.title,
+      user_email: session.user.email,
+      total_cost: totalCost,
+    });
+
+    if (result.success) {
+      Swal.fire("Success", "Booking Saved!", "success");
+      router.push("/dashboard/my-bookings");
     } else {
-      // If user exists, open the modal
-      document.getElementById("booking_modal").showModal();
+      Swal.fire("Error", "Failed to save booking", "error");
     }
   };
 
-  const handleBookingSubmit = async (e) => {
-    e.preventDefault();
-    
-    const finalBooking = {
-      ...bookingData,
-      service_id: service.service_id,
-      service_title: service.title,
-      total_cost: totalCost,
-      status: "Pending",
-      user_email: session?.user?.email, // Now using the real logged-in email
-      created_at: new Date(),
-    };
-
-    console.log("Final Booking Object:", finalBooking);
-    // Add your API call/Server Action here
-  };
-
-  if (!service) return <div className="loading loading-spinner"></div>;
+  if (!service) return <div className="p-20 text-center">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 font-poppins">
-      <div className="max-w-360 mx-auto px-6 pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
-          <div className="lg:col-span-8">
-            <h1 className="text-4xl font-black mb-6">{service.title}</h1>
-            <div className="bg-white rounded-4xl p-10 shadow-sm border border-slate-100">
-              <p className="whitespace-pre-line text-slate-600 font-light leading-relaxed">
-                {service.description}
-              </p>
-            </div>
-          </div>
-
-          <div className="lg:col-span-4">
-            <div className="sticky top-28 bg-white p-8 rounded-4xl shadow-xl border border-slate-100">
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">৳{service.price_per_unit}</span>
-                <span className="text-slate-500 font-bold uppercase text-xs">/ {service.unit}</span>
-              </div>
-
-              {/* UPDATED TRIGGER */}
-              <button
-                onClick={handleOpenModal}
-                className="btn btn-primary w-full rounded-2xl h-16 text-lg text-white"
-              >
-                Book Appointment
-              </button>
-            </div>
+      <div className="w-full h-[400px] relative">
+        <img src={service.image} className="w-full h-full object-cover" alt="" />
+        <div className="absolute inset-0 bg-black/50 flex items-end p-10">
+          <div className="max-w-7xl mx-auto w-full">
+            <h1 className="text-5xl font-black text-white">{service.title}</h1>
           </div>
         </div>
       </div>
 
-      {/* --- DAISYUI MODAL --- */}
-      <dialog id="booking_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box max-w-2xl rounded-3xl p-8">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-          </form>
-          
-          <h3 className="text-2xl font-black mb-6 flex items-center gap-2">
-            <FaCalendarCheck className="text-primary" /> Confirm Your Booking
-          </h3>
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white p-8 rounded-3xl shadow-sm">
+            <h3 className="text-xl font-bold mb-4">Description</h3>
+            <p className="text-slate-600">{service.description}</p>
+          </div>
+        </div>
 
-          <form onSubmit={handleBookingSubmit} className="space-y-6">
-             {/* ... Form inputs (Duration, City, Area, Address) remain the same ... */}
-             <div className="form-control">
-               <label className="label font-bold">Select Duration ({service.unit}s)</label>
-               <input type="range" min="1" max="24" value={bookingData.duration} 
-                 onChange={(e) => setBookingData({...bookingData, duration: e.target.value})} className="range range-primary" />
-             </div>
-             
-             {/* (Rest of your form inputs here...) */}
+        <div className="bg-white p-8 rounded-3xl shadow-xl h-fit sticky top-20">
+          <div className="text-3xl font-black mb-6">৳{service.hourly_rate}<span className="text-sm text-slate-400">/hr</span></div>
+          <button onClick={() => document.getElementById("b_modal").showModal()} className="btn btn-primary w-full text-white">Book Now</button>
+        </div>
+      </div>
 
-             <div className="bg-slate-50 p-6 rounded-2xl flex justify-between items-center border border-dashed border-slate-300">
-               <div>
-                 <p className="text-xs uppercase text-slate-500 font-bold">Total Bill</p>
-                 <p className="text-3xl font-black text-slate-800">৳{totalCost}</p>
-               </div>
-               <button type="submit" className="btn btn-primary px-10 rounded-xl text-white">Confirm & Book</button>
-             </div>
+      <dialog id="b_modal" className="modal">
+        <div className="modal-box max-w-3xl rounded-3xl p-0">
+          <div className="bg-slate-900 p-6 text-white flex justify-between">
+            <h3 className="text-xl font-bold">Confirm Booking</h3>
+            <form method="dialog"><button className="btn btn-sm btn-circle">✕</button></form>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="label font-bold">Service Date</label>
+                <input type="date" {...register("startDate", { required: true })} className="input input-bordered" />
+              </div>
+              <div className="form-control">
+                <label className="label font-bold">Duration (Hours)</label>
+                <input type="number" {...register("duration", { required: true, min: 1 })} className="input input-bordered" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <select {...register("division", { required: true })} className="select select-bordered" onChange={(e) => { register("division").onChange(e); setValue("district", ""); setValue("area", ""); }}>
+                <option value="">Division</option>
+                {divisions.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+
+              <select {...register("district", { required: true })} className="select select-bordered" disabled={!selectedDivision} onChange={(e) => { register("district").onChange(e); setValue("area", ""); }}>
+                <option value="">District</option>
+                {filteredDistricts.map(d => <option key={d.district} value={d.district}>{d.district}</option>)}
+              </select>
+
+              <select {...register("area", { required: true })} className="select select-bordered" disabled={!selectedDistrict}>
+                <option value="">Area</option>
+                {filteredAreas.map(a => <option key={a} value={a}>{a}</option>)}
+              </select>
+            </div>
+
+            <textarea {...register("address", { required: true })} className="textarea textarea-bordered w-full h-24" placeholder="Full Street Address"></textarea>
+
+            <button type="submit" className="btn btn-primary w-full text-white text-lg">Confirm & Pay</button>
           </form>
         </div>
       </dialog>
