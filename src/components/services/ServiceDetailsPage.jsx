@@ -11,6 +11,8 @@ import Swal from "sweetalert2";
 import locationsData from "@/lib/area.json";
 import { createBooking } from "@/action/server/bookings";
 import Image from "next/image";
+import Loader from "@/app/loading";
+import NotFound from "@/app/not-found";
 
 const ServiceDetailsPage = ({ service }) => {
   const { data: session } = useSession();
@@ -81,11 +83,11 @@ const ServiceDetailsPage = ({ service }) => {
     }
   };
 
-  if (!service) return <div className="h-screen flex items-center justify-center">Loading...</div>;
+  if (!service) return <NotFound></NotFound>;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-10 md:pb-20 font-poppins">
-      {/* HERO SECTION */}
+
       <div className="w-full h-75 md:h-112.5 relative overflow-hidden">
         <Image height={10} width={10} src={service.image} className="w-full h-full object-cover" alt={service.title} />
         <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
@@ -99,7 +101,7 @@ const ServiceDetailsPage = ({ service }) => {
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
+
       <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mt-8 md:mt-16">
         <div className="lg:col-span-8 space-y-6 md:space-y-10">
           <div className="bg-white rounded-[25px] md:rounded-[40px] p-6 md:p-10 shadow-sm border border-slate-100">

@@ -12,12 +12,12 @@ import {
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-white font-poppins">
+    <div className="min-h-screen bg-white font-poppins ">
       
-      {/* 1. HERO SECTION */}
+
       <section className="relative py-24 bg-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
-        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
           <span className="inline-block py-1 px-4 rounded-full bg-primary/20 text-primary text-sm font-bold mb-6 border border-primary/30">
             About Care.Bridge
           </span>
@@ -31,8 +31,8 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* 2. STATS BAR */}
-      <div className="max-w-6xl mx-auto px-6 -mt-12 relative z-20">
+
+      <div className="px-4 -mt-12 relative z-20  max-w-360 mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: 'Verified Caregivers', value: '500+' },
@@ -40,7 +40,7 @@ const AboutPage = () => {
             { label: 'Years Experience', value: '8+' },
             { label: 'Success Rate', value: '99%' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white p-6 rounded-3xl shadow-xl border border-slate-100 text-center">
+            <div key={i} className="bg-white p-6 py-10 rounded-3xl shadow-xl border border-slate-100 text-center">
               <h3 className="text-2xl md:text-3xl font-black text-slate-800">{stat.value}</h3>
               <p className="text-xs uppercase tracking-widest font-bold text-slate-400 mt-1">{stat.label}</p>
             </div>
@@ -50,7 +50,7 @@ const AboutPage = () => {
 
       {/* 3. MISSION & STORY */}
       <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20 items-center">
+        <div className=" max-w-360 mx-auto px-4 grid lg:grid-cols-2 gap-20 items-center">
           <div className="relative">
             <div className="absolute -top-10 -left-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl"></div>
             <img 
@@ -86,7 +86,7 @@ const AboutPage = () => {
 
       {/* 4. CORE VALUES SECTION */}
       <section className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className=" max-w-360 mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-4xl font-black text-slate-800">Our Core Pillars</h2>
             <p className="text-slate-500 mt-4">These values define every interaction we have with our patients and partners.</p>
@@ -110,7 +110,7 @@ const AboutPage = () => {
 
       {/* 5. TEAM/LEADERSHIP SECTION */}
       <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className=" max-w-360 mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-xl">
               <h2 className="text-4xl font-black text-slate-800 mb-4">The Faces Behind Care.Bridge</h2>
@@ -141,7 +141,7 @@ const AboutPage = () => {
 
       {/* 6. CTA SECTION */}
       <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className=" max-w-360 mx-auto px-4">
           <div className="bg-slate-900 rounded-[60px] p-12 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-primary/20">
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>

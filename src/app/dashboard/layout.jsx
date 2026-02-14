@@ -14,7 +14,7 @@ const DashboardLayout = ({ children }) => {
     ];
 
     return (
-        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins">
+        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins ">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
             
             <div className="drawer-content flex flex-col">

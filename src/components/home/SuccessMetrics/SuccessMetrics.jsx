@@ -1,18 +1,18 @@
 const SuccessMetrics = () => {
   return (
-    <div className="bg-primary py-12">
+    <div className="bg-base-300 py-20 text-black">
       <div className="container mx-auto px-4">
-        <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
+        <div className="stats stats-vertical lg:stats-horizontal w-full">
           <div className="stat place-items-center">
-            <div className="stat-title">Happy Families</div>
-            <div className="stat-value text-primary">2,500+</div>
+            <div>Happy Families</div>
+            <div className="stat-value">2,500+</div>
           </div>
           <div className="stat place-items-center">
-            <div className="stat-title">Verified Caregivers</div>
-            <div className="stat-value text-secondary">450+</div>
+            <div>Verified Caregivers</div>
+            <div className="stat-value">450+</div>
           </div>
           <div className="stat place-items-center">
-            <div className="stat-title">Total Care Hours</div>
+            <div>Total Care Hours</div>
             <div className="stat-value">120K+</div>
           </div>
         </div>

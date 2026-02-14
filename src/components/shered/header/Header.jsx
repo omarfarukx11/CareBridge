@@ -33,7 +33,6 @@ const Header = () => {
             </ul>
           </div>
           <Link href="/" className="flex items-center gap-2 text-2xl font-bold ">
-            <FaHandHoldingHeart className="text-2xl" />
             <span className="hidden sm:inline">Care.Bridge</span>
           </Link>
         </div>

@@ -9,12 +9,11 @@ const Footer = () => {
   if (pathname.startsWith("/register") ||pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
   return (
     <footer className="bg-neutral text-base-100 border-t border-base-300">
-      <div className="container mx-auto px-4 py-10">
+      <div className="container px-4 py-10  max-w-360 mx-auto">
         <div className="footer grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
           <aside>
-            <div className="flex items-center gap-2 text-2xl font-bold text-primary mb-4">
-              <FaHandHoldingHeart />
+            <div className="flex items-center gap-2 text-2xl font-bold text-base-100 mb-4">
               <span>Care.Bridge</span>
             </div>
             <p className="max-w-xs leading-relaxed">
