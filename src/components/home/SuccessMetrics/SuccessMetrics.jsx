@@ -1,7 +1,7 @@
 const SuccessMetrics = () => {
   return (
     <div className="bg-base-300 py-20 text-black">
-      <div className="container mx-auto px-4">
+      <div className="container max-w-7xl mx-auto px-4">
         <div className="stats stats-vertical lg:stats-horizontal w-full">
           <div className="stat place-items-center">
             <div>Happy Families</div>

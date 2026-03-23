@@ -9,7 +9,7 @@ const Footer = () => {
   if (pathname.startsWith("/register") ||pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
   return (
     <footer className="bg-neutral text-base-100 border-t border-base-300">
-      <div className="container px-4 py-10  max-w-360 mx-auto">
+      <div className="container px-4 py-10 max-w-7xl  mx-auto">
         <div className="footer grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
           <aside>
