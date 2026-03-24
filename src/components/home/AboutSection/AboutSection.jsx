@@ -10,7 +10,6 @@ const AboutSection = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-24 items-center">
           
-          {/* LEFT: THE MULTI-LAYERED IMAGE STACK */}
           <motion.div 
             initial={{ opacity: 0, x: -60 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -38,13 +37,11 @@ const AboutSection = () => {
                 </div>
               </div>
             </div>
-            {/* Massive decorative background text */}
             <div className="absolute -top-20 -left-20 text-[12rem] font-black text-slate-50 -z-10 select-none">
               CARE
             </div>
           </motion.div>
 
-          {/* RIGHT: DEEP STORY & DATA */}
           <div className="space-y-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -61,7 +58,6 @@ const AboutSection = () => {
               In a world where finding reliable medical help is a struggle, Care.Bridge stands as the gold standard. We don't just connect people; we verify, train, and monitor every interaction to guarantee hospital-grade care in your bedroom.
             </p>
 
-            {/* Large Data Grid */}
             <div className="grid sm:grid-cols-2 gap-8 py-6">
               {[
                 { icon: <FaUserShield />, title: "3-Layer Vetting", desc: "NID, Criminal, & Medical license verification." },
@@ -79,7 +75,7 @@ const AboutSection = () => {
 
             <div className="flex flex-wrap items-center gap-8 pt-4">
               <Link href="/about">
-                <button className="primary-btn !rounded-xl !px-10 !py-5 text-lg">Read Our Full Story</button>
+                <button className="primary-btn rounded-xl! px-10! py-5! text-lg">Read Our Full Story</button>
               </Link>
               <div className="flex -space-x-4">
                 {[1, 2, 3, 4].map((i) => (

@@ -13,12 +13,11 @@ const Testimonials = () => {
     { name: "Mehedi Hasan", text: "The best home-care service in Dhaka. Their medical board is a plus.", rating: 5, role: "Doctor" },
   ];
 
-  // We double the array to create a seamless infinite loop effect
+
   const duplicatedReviews = [...reviews, ...reviews];
 
   return (
     <section className="py-32 bg-[#0f172a] overflow-hidden relative">
-      {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
       
       <div className="max-w-7xl mx-auto px-6 mb-20 text-center relative z-10">
@@ -39,18 +38,17 @@ const Testimonials = () => {
         </motion.h2>
       </div>
 
-      {/* The Infinite Slider Container */}
       <div className="relative flex overflow-hidden py-10">
         <motion.div 
           className="flex gap-8 whitespace-nowrap"
           animate={{
-            x: ["0%", "-50%"], // Move half the width (the original set)
+            x: ["0%", "-50%"],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 40, // Adjust speed here (higher = slower)
+              duration: 40,
               ease: "linear",
             },
           }}
@@ -59,7 +57,7 @@ const Testimonials = () => {
           {duplicatedReviews.map((rev, i) => (
             <div 
               key={i} 
-              className="w-[400px] bg-white/5 backdrop-blur-md p-10 rounded-xl border border-white/10 flex flex-col justify-between hover:bg-white/10 transition-colors group"
+              className="w-100 bg-white/5 backdrop-blur-md p-10 rounded-xl border border-white/10 flex flex-col justify-between hover:bg-white/10 transition-colors group"
             >
               <div>
                 <FaQuoteLeft className="text-primary text-3xl mb-6 opacity-50 group-hover:opacity-100 transition-opacity" />

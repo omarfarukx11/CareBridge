@@ -3,15 +3,22 @@ import React, { useMemo, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { 
-  FaClock, FaMapMarkerAlt, FaArrowRight, FaShieldAlt, 
-  FaInfoCircle, FaCheckCircle, FaCalendarAlt 
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaClock,
+  FaMapMarkerAlt,
+  FaArrowRight,
+  FaShieldAlt,
+  FaInfoCircle,
+  FaCheckCircle,
+  FaCalendarAlt,
+  FaStar,
+  FaUserMd,
 } from "react-icons/fa";
 import Swal from "sweetalert2";
 import locationsData from "@/lib/area.json";
 import { createBooking } from "@/action/server/bookings";
 import Image from "next/image";
-import Loader from "@/app/loading";
 import NotFound from "@/app/not-found";
 
 const ServiceDetailsPage = ({ service }) => {
@@ -19,17 +26,25 @@ const ServiceDetailsPage = ({ service }) => {
   const router = useRouter();
   const [bookingType, setBookingType] = useState("hour");
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       duration: 1,
       startTime: "09:00",
-      startDate: new Date().toISOString().split('T')[0],
-      endDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+      startDate: new Date().toISOString().split("T")[0],
+      endDate: new Date(new Date().setDate(new Date().getDate() + 1))
+        .toISOString()
+        .split("T")[0],
       division: "",
       district: "",
       area: "",
-      address: ""
-    }
+      address: "",
+    },
   });
 
   const selectedDivision = watch("division");
@@ -38,26 +53,37 @@ const ServiceDetailsPage = ({ service }) => {
   const startDate = watch("startDate");
   const endDate = watch("endDate");
 
+  // Calculate days automatically if Daily Package is selected
   useEffect(() => {
     if (bookingType === "day" && startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       const diffTime = end - start;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; 
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
       setValue("duration", diffDays > 0 ? diffDays : 1);
     }
   }, [startDate, endDate, bookingType, setValue]);
 
-  const divisions = useMemo(() => (locationsData ? [...new Set(locationsData.map(l => l.region))] : []), []);
-  const filteredDistricts = useMemo(() => locationsData.filter(l => l.region === selectedDivision), [selectedDivision]);
+  const divisions = useMemo(
+    () =>
+      locationsData ? [...new Set(locationsData.map((l) => l.region))] : [],
+    [],
+  );
+  const filteredDistricts = useMemo(
+    () => locationsData.filter((l) => l.region === selectedDivision),
+    [selectedDivision],
+  );
   const filteredAreas = useMemo(() => {
-    const districtObj = filteredDistricts.find(d => d.district === selectedDistrict);
+    const districtObj = filteredDistricts.find(
+      (d) => d.district === selectedDistrict,
+    );
     return districtObj ? districtObj.covered_area : [];
   }, [selectedDistrict, filteredDistricts]);
 
   const hRate = service?.hourly_rate || 0;
   const dRate = service?.daily_rate || 0;
-  const totalCost = (bookingType === "hour" ? hRate : dRate) * (Number(currentDuration) || 0);
+  const totalCost =
+    (bookingType === "hour" ? hRate : dRate) * (Number(currentDuration) || 0);
 
   const onSubmit = async (data) => {
     if (!session) return router.push("/login");
@@ -83,146 +109,399 @@ const ServiceDetailsPage = ({ service }) => {
     }
   };
 
-  if (!service) return <NotFound></NotFound>;
+  if (!service) return <NotFound />;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-10 md:pb-20 font-poppins">
+    <div className="min-h-screen bg-white pb-20 font-sans">
+      <div className="relative h-[60vh] md:h-[70vh] w-full overflow-hidden">
+        <motion.div
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0"
+        >
+          <Image
+            fill
+            src={service.image}
+            className="object-cover"
+            alt={service.title}
+            priority
+            sizes="100vw"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-linear-to-t from-white via-slate-900/40 to-transparent"></div>
 
-      <div className="w-full h-75 md:h-112.5 relative overflow-hidden">
-        <Image height={10} width={10} src={service.image} className="w-full h-full object-cover" alt={service.title} />
-        <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-        <div className="absolute bottom-6 md:bottom-12 left-0 w-full px-4 md:px-6">
-           <div className="max-w-7xl mx-auto">
-              <span className="px-3 py-1 md:px-5 md:py-2 bg-primary text-white text-[10px] md:text-xs font-black rounded-full uppercase tracking-[2px]">Verified Service</span>
-              <h1 className="text-2xl md:text-6xl font-black text-white mt-3 md:mt-6 drop-shadow-lg max-w-4xl leading-tight">
+        <div className="absolute bottom-0 left-0 w-full pb-12 px-6">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <span className="px-4 py-2 bg-primary text-white text-xs font-black rounded-lg uppercase tracking-widest shadow-xl">
+                Premium {service.tag || "Healthcare"}
+              </span>
+              <h1 className="text-4xl md:text-7xl font-black text-slate-900 md:text-white mt-6 leading-[0.9] tracking-tighter max-w-4xl">
                 {service.title}
               </h1>
-           </div>
+              <div className="flex items-center gap-6 mt-8 text-slate-700 md:text-slate-200">
+                <div className="flex items-center gap-2">
+                  <FaStar className="text-orange-400" />
+                  <span className="font-bold">4.9 (1.2k Reviews)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaShieldAlt className="text-primary" />
+                  <span className="font-bold">Fully Insured</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
-
-      <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 mt-8 md:mt-16">
-        <div className="lg:col-span-8 space-y-6 md:space-y-10">
-          <div className="bg-white rounded-[25px] md:rounded-[40px] p-6 md:p-10 shadow-sm border border-slate-100">
-            <h3 className="text-xl md:text-2xl font-black mb-4 md:mb-6 flex items-center gap-3 text-slate-800">
-              <FaInfoCircle className="text-primary"/> Service Description
-            </h3>
-            <p className="text-slate-600 leading-relaxed text-sm md:text-lg font-light whitespace-pre-line">
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-16 mt-16">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="lg:col-span-8 space-y-12"
+        >
+          <section>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary text-xl">
+                <FaInfoCircle />
+              </div>
+              <h3 className="text-3xl font-black text-slate-900 tracking-tight">
+                About this Service
+              </h3>
+            </div>
+            <p className="text-slate-500 text-xl leading-relaxed font-medium">
               {service.description}
             </p>
-          </div>
-          
-          <div className="bg-white rounded-[25px] md:rounded-[40px] p-6 md:p-10 shadow-sm border border-slate-100">
-            <h3 className="text-xl md:text-2xl font-black mb-6 text-slate-800">Service Highlights</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {["Professional Staff", "Affordable Pricing", "Quality Guaranteed", "24/7 Support"].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <FaCheckCircle className="text-primary" />
-                  <span className="font-bold text-slate-700 text-sm md:text-base">{item}</span>
+          </section>
+
+          <section className="bg-slate-50 rounded-3xl p-10 border border-slate-100">
+            <h3 className="text-2xl font-bold text-slate-900 mb-8">
+              Why Choose Our {service.title}?
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { t: "Expert Staff", d: "Certified & Background Checked" },
+                { t: "Transparent", d: "No hidden costs, hourly billing" },
+                { t: "Flexible", d: "Reschedule anytime via dashboard" },
+                { t: "Support", d: "24/7 dedicated medical board" },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex gap-4 p-4 bg-white rounded-lg shadow-sm"
+                >
+                  <FaCheckCircle className="text-primary mt-1 shrink-0" />
+                  <div>
+                    <h4 className="font-black text-slate-900">{item.t}</h4>
+                    <p className="text-xs text-slate-500">{item.d}</p>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </section>
+        </motion.div>
 
-        {/* RIGHT COLUMN: SIDEBAR */}
         <div className="lg:col-span-4">
-          <div className="sticky top-24 bg-white p-6 md:p-10 rounded-[25px] md:rounded-[40px] shadow-2xl border border-slate-50">
-            <div className="space-y-4 mb-8">
-              <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl">
-                <span className="font-bold text-slate-400 text-[10px] md:text-xs uppercase">Hourly Rate</span>
-                <span className="text-xl md:text-2xl font-black text-slate-900">৳{service.hourly_rate}</span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="sticky top-28 group"
+          >
+            <div className="absolute -inset-1 bg-linear-to-r from-primary to-blue-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+
+            <div className="relative bg-[#0f172a] rounded-lg shadow-sm overflow-hidden border border-white/10">
+              <div className="bg-linear-to-br from-slate-800 to-slate-900 p-8 border-b border-white/5">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-primary font-black uppercase tracking-[3px] text-[10px] mb-2">
+                      Standard Rate
+                    </p>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black text-white italic">
+                        ৳{service.hourly_rate}
+                      </span>
+                      <span className="text-slate-400 font-bold text-sm">
+                        /hr
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-white/5 backdrop-blur-md p-3 rounded-lg border border-white/10">
+                    <FaUserMd className="text-primary text-2xl" />
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between items-center p-4 bg-slate-50 rounded-2xl">
-                <span className="font-bold text-slate-400 text-[10px] md:text-xs uppercase">Daily Rate</span>
-                <span className="text-xl md:text-2xl font-black text-slate-900">৳{service.daily_rate}</span>
+
+              <div className="p-8 space-y-6">
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: <FaCheckCircle size={14} />,
+                      text: "Verified Professional Care",
+                      color: "text-green-500",
+                      bg: "bg-green-500/10",
+                    },
+                    {
+                      icon: <FaShieldAlt size={14} />,
+                      text: "Liability Insurance Covered",
+                      color: "text-blue-500",
+                      bg: "bg-blue-500/10",
+                    },
+                    {
+                      icon: <FaClock size={14} />,
+                      text: "Instant Scheduling",
+                      color: "text-purple-500",
+                      bg: "bg-purple-500/10",
+                    },
+                  ].map((feat, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-4 text-slate-300"
+                    >
+                      <div
+                        className={`w-8 h-8 rounded-full ${feat.bg} flex items-center justify-center ${feat.color}`}
+                      >
+                        {feat.icon}
+                      </div>
+                      <span className="text-sm font-semibold">{feat.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="bg-primary/5 rounded-3xl p-5 border border-primary/20">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-white font-bold text-sm">
+                        Daily Package
+                      </p>
+                      <p className="text-slate-400 text-[10px]">
+                        Best for long-term care
+                      </p>
+                    </div>
+                    <span className="text-xl font-black text-primary">
+                      ৳{service.daily_rate}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => document.getElementById("b_modal").showModal()}
+                  className="primary-btn w-full"
+                >
+                  Book Now <FaArrowRight />
+                </button>
+
+                <p className="text-center text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                  Secure Process • No Payment Required Now
+                </p>
+              </div>
+
+              {/* Trust Footer */}
+              <div className="bg-slate-900/50 p-6 border-t border-white/5 flex items-center justify-center opacity-30 grayscale brightness-200">
+                <span className="text-[10px] font-black tracking-widest text-white">
+                  CARE.BRIDGE SECURE PROTOCOL
+                </span>
               </div>
             </div>
-            <button 
-              onClick={() => document.getElementById("b_modal").showModal()} 
-              className="btn btn-primary w-full rounded-[20px] md:rounded-[25px] h-16 md:h-20 text-lg md:text-xl text-white font-black shadow-lg"
-            >
-              Book Appointment
-            </button>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* BOOKING MODAL */}
-      <dialog id="b_modal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box max-w-4xl rounded-t-[30px] sm:rounded-[40px] p-0 bg-white overflow-hidden shadow-2xl">
-          <div className="bg-slate-900 p-6 md:p-10 text-white relative text-center">
-            <form method="dialog"><button className="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">✕</button></form>
-            <h3 className="text-xl md:text-3xl font-black uppercase mb-4 md:mb-6">Configure Booking</h3>
-            
-            <div className="bg-white/5 p-1 rounded-2xl md:rounded-3xl inline-flex border border-white/10">
-              <button type="button" onClick={() => { setBookingType("hour"); setValue("duration", 1); }} className={`px-6 md:px-10 py-2 md:py-3 rounded-xl md:rounded-[20px] text-xs md:text-sm font-black transition-all ${bookingType === 'hour' ? 'bg-primary text-white' : 'text-slate-400'}`}>Hourly</button>
-              <button type="button" onClick={() => { setBookingType("day"); }} className={`px-6 md:px-10 py-2 md:py-3 rounded-xl md:rounded-[20px] text-xs md:text-sm font-black transition-all ${bookingType === 'day' ? 'bg-primary text-white' : 'text-slate-400'}`}>Daily</button>
+      <dialog
+        id="b_modal"
+        className="modal modal-bottom sm:modal-middle backdrop-blur-md overflow-y-auto"
+      >
+        <div className="modal-box max-w-4xl p-0 bg-white rounded-lg shadow-2xl border-none h-fit my-6 sm:my-12 mx-auto">
+          <div className="bg-[#0f172a] p-8 md:p-10 text-white relative">
+            <form method="dialog">
+              <button className="absolute right-6 cursor-pointer top-6 w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all text-sm outline-none">
+                ✕
+              </button>
+            </form>
+            <div className="space-y-1">
+              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+                Confirm Booking
+              </h3>
+              <p className="text-slate-400 text-xs font-medium uppercase tracking-widest">
+                {service?.title}
+              </p>
+            </div>
+
+            <div className="mt-8 flex bg-white/5 p-1 rounded-lg w-fit border border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  setBookingType("hour");
+                  setValue("duration", 1);
+                }}
+                className={`px-8 py-2.5 rounded-lg text-xs cursor-pointer font-black transition-all outline-none ${bookingType === "hour" ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white"}`}
+              >
+                Hourly
+              </button>
+              <button
+                type="button"
+                onClick={() => setBookingType("day")}
+                className={`px-8 py-2.5 rounded-lg text-xs cursor-pointer font-black transition-all outline-none ${bookingType === "day" ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white"}`}
+              >
+                Daily
+              </button>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="p-6 md:p-10 space-y-8 md:space-y-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-              {/* SCHEDULE SECTION */}
-              <div className="space-y-4 md:space-y-6">
-                <h3 className="font-black flex items-center gap-2 text-slate-800 text-lg md:text-xl"><FaClock className="text-primary"/> 1. Schedule</h3>
-                <div className="bg-slate-50 p-5 md:p-6 rounded-[25px] md:rounded-[32px] space-y-4 border border-slate-100">
-                  <div className={`grid ${bookingType === 'day' ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="p-6 md:p-10 space-y-10"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+              <div className="space-y-6">
+                <p className="text-[10px] font-black text-primary uppercase tracking-[3px] flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center text-[10px]">
+                    1
+                  </span>
+                  Schedule Details
+                </p>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="form-control">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{bookingType === 'hour' ? 'Service Date' : 'Start Date'}</label>
-                      <input type="date" {...register("startDate", { required: true })} className="input bg-transparent border-none text-base md:text-lg font-black p-0 h-auto focus:outline-none" />
+                      <label className="label-text text-[10px] font-bold text-slate-400 mb-2 ml-1">
+                        START DATE
+                      </label>
+                      <input
+                        type="date"
+                        {...register("startDate", { required: true })}
+                        className="w-full font-bold text-sm rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      />
                     </div>
-                    {bookingType === 'day' && (
-                      <div className="form-control">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">End Date</label>
-                        <input type="date" {...register("endDate", { required: true })} className="input bg-transparent border-none text-base md:text-lg font-black p-0 h-auto focus:outline-none" />
-                      </div>
-                    )}
+
+                    <div className="form-control">
+                      <label className="label-text text-[10px] font-bold text-slate-400 mb-2 ml-1">
+                        {bookingType === "day" ? "END DATE" : "START TIME"}
+                      </label>
+                      {bookingType === "day" ? (
+                        <input
+                          type="date"
+                          {...register("endDate", { required: true })}
+                          className="w-full font-bold text-sm rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      ) : (
+                        <input
+                          type="time"
+                          {...register("startTime", { required: true })}
+                          className="w-full font-bold text-sm rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div className="flex gap-4 md:gap-6 border-t pt-4">
-                    <div className="flex-1">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Start Time</label>
-                      <input type="time" {...register("startTime", { required: true })} className="input bg-transparent border-none text-base md:text-lg font-black p-0 h-auto focus:outline-none" />
-                    </div>
-                    <div className="flex-1">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{bookingType === 'hour' ? 'Hours' : 'Days'}</label>
-                      <input type="number" {...register("duration", { required: true, min: 1 })} className="input bg-transparent border-none text-base md:text-lg font-black p-0 h-auto focus:outline-none" readOnly={bookingType === 'day'} />
+
+                  <div className="form-control">
+                    <label className="label-text text-[10px] font-bold text-slate-400 mb-2 ml-1 uppercase">
+                      Total {bookingType === "hour" ? "Hours" : "Days"} Needed
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        {...register("duration", { required: true, min: 1 })}
+                        className={`w-full font-black text-lg rounded-lg h-14 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all ${bookingType === "day" ? "bg-slate-100 cursor-not-allowed" : "bg-slate-50"}`}
+                        readOnly={bookingType === "day"}
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase">
+                        {bookingType === "hour" ? "Hrs" : "Days"}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* LOCATION SECTION */}
-              <div className="space-y-4 md:space-y-6">
-                <h3 className="font-black flex items-center gap-2 text-slate-800 text-lg md:text-xl"><FaMapMarkerAlt className="text-primary"/> 2. Location</h3>
-                <div className="space-y-3 md:space-y-4">
-                  <select {...register("division", { required: true })} className="select select-bordered select-sm md:select-md w-full rounded-xl md:rounded-2xl" onChange={(e) => { setValue("division", e.target.value); setValue("district", ""); setValue("area", ""); }}>
-                    <option value="">Select Division</option>
-                    {divisions.map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                  <div className="flex gap-2 md:gap-4">
-                    <select {...register("district", { required: true })} className="select select-bordered select-sm md:select-md flex-1 rounded-xl md:rounded-2xl" disabled={!selectedDivision} onChange={(e) => { setValue("district", e.target.value); setValue("area", ""); }}>
-                      <option value="">District</option>
-                      {filteredDistricts.map(d => <option key={d.district} value={d.district}>{d.district}</option>)}
+              <div className="space-y-6">
+                <p className="text-[10px] font-black text-primary uppercase tracking-[3px] flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center text-[10px]">
+                    2
+                  </span>
+                  Service Location
+                </p>
+
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <select
+                      {...register("division", { required: true })}
+                      className="w-full font-bold text-xs rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      onChange={(e) => {
+                        setValue("division", e.target.value);
+                        setValue("district", "");
+                        setValue("area", "");
+                      }}
+                    >
+                      <option value="">Division</option>
+                      {divisions.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
                     </select>
-                    <select {...register("area", { required: true })} className="select select-bordered select-sm md:select-md flex-1 rounded-xl md:rounded-2xl" disabled={!selectedDistrict}>
-                      <option value="">Area</option>
-                      {filteredAreas.map(a => <option key={a} value={a}>{a}</option>)}
+                    <select
+                      {...register("district", { required: true })}
+                      className="w-full font-bold text-xs rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      disabled={!selectedDivision}
+                      onChange={(e) => {
+                        setValue("district", e.target.value);
+                        setValue("area", "");
+                      }}
+                    >
+                      <option value="">District</option>
+                      {filteredDistricts.map((d) => (
+                        <option key={d.district} value={d.district}>
+                          {d.district}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                  <textarea {...register("address", { required: true })} className="textarea textarea-bordered w-full rounded-xl md:rounded-2xl h-20 md:h-24 text-sm" placeholder="Full Address Details"></textarea>
+                  <select
+                    {...register("area", { required: true })}
+                    className="w-full font-bold text-xs rounded-lg h-14 bg-slate-50 border border-slate-200 px-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    disabled={!selectedDistrict}
+                  >
+                    <option value="">Select Covered Area</option>
+                    {filteredAreas.map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
+                  </select>
+                  <textarea
+                    {...register("address", { required: true })}
+                    className="w-full rounded-lg h-24 font-medium bg-slate-50 border border-slate-200 p-4 outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm resize-none"
+                    placeholder="House no, Road name, Apartment details..."
+                  ></textarea>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-900 rounded-[30px] md:rounded-[40px] p-6 md:p-10 flex flex-col md:flex-row justify-between items-center text-white gap-6">
+            <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
               <div className="text-center md:text-left">
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[2px] md:tracking-[4px] mb-1">Total Payable</p>
-                <h4 className="text-4xl md:text-6xl font-black">৳{totalCost}</h4>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                  Total Amount Due
+                </p>
+                <div className="flex items-baseline gap-1 justify-center md:justify-start">
+                  <span className="text-3xl font-black italic text-slate-900">
+                    ৳{totalCost}
+                  </span>
+                  <span className="text-slate-400 font-bold text-sm">
+                    /total
+                  </span>
+                </div>
               </div>
-              <button type="submit" className="btn btn-primary w-full md:w-auto px-10 md:px-16 h-14 md:h-20 rounded-2xl md:rounded-[25px] text-white font-black text-lg md:text-xl border-none shadow-2xl">
-                Confirm Booking <FaArrowRight className="ml-3 hidden md:inline"/>
+
+              <button
+                type="submit"
+                className="primary-btn"
+              >
+                Confirm Booking <FaArrowRight className="text-sm" />
               </button>
             </div>
           </form>

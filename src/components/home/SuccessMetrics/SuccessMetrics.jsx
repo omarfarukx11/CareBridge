@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 const SuccessMetrics = () => {
   return (
     <section className="relative py-40 bg-[#0f172a] overflow-hidden">
-      {/* Background Decorative Element */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center text-center">
@@ -25,7 +24,7 @@ const SuccessMetrics = () => {
             className="text-5xl md:text-8xl font-black text-white leading-tight tracking-tighter"
           >
             Care is not a service. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-cyan-400">
               It’s a Promise.
             </span>
           </motion.h2>
@@ -42,7 +41,6 @@ const SuccessMetrics = () => {
           </motion.p>
         </div>
 
-        {/* Big Number Stats for "Large Website" Feel */}
         <div className="grid md:grid-cols-3 gap-12 mt-32 border-t border-white/10 pt-20">
           {[
             { number: "24/7", label: "Medical Support Available" },
