@@ -1,2 +1,35 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+
+/* globals.css */
+
+.active-link {
+  @apply bg-primary! text-white! rounded-lg px-4 py-2;
+}
+
+.menu li a.active-link:hover {
+  @apply bg-primary! text-white;
+}
+
+
+
+.primary-btn {
+
+  @apply bg-[#155DFC]! text-white! rounded-lg px-6 py-2 font-bold cursor-pointer;
+  @apply flex items-center justify-center gap-2 border-none outline-none;
+  
+  /* Modern Transitions */
+  @apply transition-all duration-100 ease-in-out shadow-lg relative overflow-hidden;
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+
+
+  @apply hover:bg-[#06b6d4]! hover:scale-[1.02];
+  @apply hover:shadow-xl hover:shadow-cyan-400/40;
+  
+
+  @apply active:scale-95 active:translate-y-0;
+}
+
+

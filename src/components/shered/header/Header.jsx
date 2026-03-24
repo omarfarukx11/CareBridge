@@ -1,40 +1,53 @@
 "use client";
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { HiOutlineMenuAlt3 } from 'react-icons/hi';
-import { FaHandHoldingHeart } from 'react-icons/fa';
+import { HiOutlineMenuAlt3, HiX } from 'react-icons/hi';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { IoLogOutOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoPersonOutline } from "react-icons/io5";
+import { motion, AnimatePresence } from 'framer-motion';
+
 const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const user = session?.user;
+
+  // Handle Scroll Lock
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   if (pathname.startsWith("/register") || pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
 
+  const isActive = (path) => pathname === path;
+
   const navLinks = (
     <>
-      <li><Link href="/">Home</Link></li>
-      <li><Link href="/services">Services</Link></li>
-      <li><Link href="/about">About Us</Link></li>
-      <li><Link href="/about">Contact</Link></li>
+      <li><Link href="/" className={isActive('/') ? 'active-link' : ''}>Home</Link></li>
+      <li><Link href="/services" className={isActive('/services') ? 'active-link' : ''}>Services</Link></li>
+      <li><Link href="/about" className={isActive('/about') ? 'active-link' : ''}>About Us</Link></li>
+      <li><Link href="/contact" className={isActive('/contact') ? 'active-link' : ''}>Contact</Link></li>
     </>
   );
 
   return (
-    <div className='bg-base-100 py-2 sticky top-0 z-50'>
-      <div className="navbar max-w-7xl mx-auto">
+    <div className='bg-base-100 py-2 sticky top-0 z-50 border-b border-gray-100'>
+      <div className="navbar max-w-7xl mx-auto px-4">
+        
         <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
-              <HiOutlineMenuAlt3 className="text-2xl" />
-            </label>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 rounded-box w-52 font-medium">
-              {navLinks}
-            </ul>
-          </div>
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold ">
-            <span className="hidden sm:inline">Care.Bridge</span>
+          <button onClick={() => setIsOpen(true)} className="btn btn-ghost lg:hidden p-2">
+            <HiOutlineMenuAlt3 className="text-2xl" />
+          </button>
+          <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
+            <span className="text-primary">Care.</span>Bridge
           </Link>
         </div>
 
@@ -44,19 +57,88 @@ const Header = () => {
           </ul>
         </div>
 
-        <div className="navbar-end gap-2">
+
+        <div className="navbar-end gap-3">
           {status === "authenticated" ? (
-            <div className="flex items-center justify-center gap-5">
-            <Link href={'/dashboard/myBooking'} className='btn btn-primary'>Dashboard</Link>
-            <button onClick={() => signOut()} className="btn bg-red-600 rounded-lg text-white"><IoLogOutOutline className='text-xl' /></button>
-            </div>
+            <>
+
+              <Link href={'/dashboard/myBooking'} className='primary-btn'>
+                Dashboard
+              </Link>
+              
+
+              <button 
+                onClick={() => signOut()} 
+                className="hidden lg:flex btn bg-red-600 hover:bg-red-700 border-none text-white btn-sm md:btn-md"
+              >
+                <IoLogOutOutline className='text-xl' />
+              </button>
+            </>
           ) : (
-            <div className="flex gap-2">
-              <Link href="/login" className="btn btn-primary btn-sm md:btn-md text-white">Login</Link>
-            </div>
+            <Link href="/login" className="btn btn-primary btn-sm md:btn-md text-white px-6">Login</Link>
           )}
         </div>
       </div>
+
+      {/* --- MOBILE SIDEBAR --- */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-60 lg:hidden"
+            />
+
+            <motion.aside 
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 h-full w-[75%] bg-white z-70 shadow-2xl p-6 lg:hidden flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-8">
+                  <span className="text-xl font-bold text-primary">Care.Bridge</span>
+                  <button onClick={() => setIsOpen(false)} className="btn btn-circle btn-ghost btn-sm">
+                    <HiX className="text-2xl" />
+                  </button>
+                </div>
+
+                <ul className="menu menu-vertical p-0 gap-3 text-lg font-medium">
+                  {navLinks}
+                </ul>
+              </div>
+
+
+              {status === "authenticated" && (
+                <div className="border-t border-gray-100 pt-6 space-y-4">
+                  <div className="flex items-center gap-3 px-2">
+                    <div className="bg-blue-50 p-2 rounded-full text-blue-600">
+                        <IoPersonOutline className="text-xl" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-bold text-gray-800 truncate max-w-35">
+                          {session?.user?.name || "User"}
+                        </p>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => signOut()} 
+                    className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-4 rounded-2xl transition-all duration-300 group"
+                  >
+                    <IoLogOutOutline className='text-2xl group-hover:scale-110 transition-transform' />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              )}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
