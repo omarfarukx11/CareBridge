@@ -33,10 +33,10 @@ const DashboardLayout = ({ children }) => {
             <div className="drawer-side z-50">
                 <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
                 <div className="menu p-6 w-80 min-h-full bg-slate-900 text-white">
-                    <div className="flex items-center gap-2 text-2xl font-black mb-10 px-4">
+                    <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-10 px-4">
                         <FaHandHoldingHeart className="text-primary" />
                         <span>Care.Bridge</span>
-                    </div>
+                    </Link>
 
                     <ul className="space-y-2">
                         {menuItems.map((item) => (

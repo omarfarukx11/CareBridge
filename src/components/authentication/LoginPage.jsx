@@ -1,18 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation"; // Added useSearchParams
+import { useRouter, useSearchParams } from "next/navigation"; 
 import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock, FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 import { signIn } from "next-auth/react"; 
 import Swal from "sweetalert2"; 
+import SocialButton from "@/utility/SocialButton";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  // Get the redirect path from URL (e.g., /services/123) or default to home
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -40,7 +40,6 @@ const LoginPage = () => {
         showConfirmButton: false,
       });
 
-      // Redirect to the callbackUrl (the previous page)
       router.push(callbackUrl); 
       router.refresh(); 
     }
@@ -48,7 +47,6 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-poppins">
-      {/* ... (Existing JSX remains exactly the same) ... */}
       <div className="max-w-5xl w-full bg-white rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         <div className="hidden lg:flex bg-slate-900 relative p-12 flex-col justify-between text-white">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
@@ -89,7 +87,9 @@ const LoginPage = () => {
               </div>
             </div>
 
+        
             <button type="submit" className="btn btn-primary w-full rounded-2xl h-14 text-white">Log In</button>
+            <SocialButton></SocialButton>
             <p className="text-center text-sm mt-8">Don't have an account? <Link href="/register" className="text-primary font-bold">Register for Free</Link></p>
           </form>
         </div>

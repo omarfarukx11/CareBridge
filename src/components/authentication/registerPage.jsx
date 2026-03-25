@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaArrowLeft } from "react-icons/fa";
 import { postUser } from "@/action/server/register";
-import Swal from "sweetalert2"; // Import SweetAlert2
+import Swal from "sweetalert2";
+import SocialButton from "@/utility/SocialButton";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -15,7 +16,6 @@ const RegisterPage = () => {
     const result = await postUser(data);
     
     if (result?.success) {
-      // Success Alert
       Swal.fire({
         title: "Registration Successful!",
         text: result.message || "Your account has been created.",
@@ -24,15 +24,13 @@ const RegisterPage = () => {
         showConfirmButton: false,
       });
 
-      // Redirect to login page after success
       router.push("/login");
     } else {
-      // Error Alert
       Swal.fire({
         title: "Registration Failed",
         text: result?.message || "Something went wrong. Please try again.",
         icon: "error",
-        confirmButtonColor: "#3b82f6", // Matches your primary blue
+        confirmButtonColor: "#3b82f6", 
       });
     }
   };
@@ -141,10 +139,13 @@ const RegisterPage = () => {
               {errors.password && <span className="text-error text-[10px] mt-1">{errors.password.message}</span>}
             </div>
 
+
+
             <button type="submit" className="btn btn-primary w-full rounded-lg h-12 text-white text-lg mt-4 border-none">
               Register 
             </button>
-
+            <SocialButton></SocialButton>
+              
             <p className="text-center text-slate-500 text-sm mt-4">
               Already have an account?{" "}
               <Link href="/login" className="text-primary font-bold hover:underline">Log In</Link>
