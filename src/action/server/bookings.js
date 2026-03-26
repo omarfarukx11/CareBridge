@@ -4,7 +4,7 @@ import { dbConnect } from "@/lib/dbConnect";
 export async function createBooking(data) {
   try {
 
-    const collection = dbConnect("bookings");
+    const collection = await dbConnect("bookings");
     
     const result = await collection.insertOne({
       ...data,
@@ -21,7 +21,8 @@ export async function createBooking(data) {
 
 export async function getUserBookings(email) {
   try {
-    const bookings = await dbConnect("bookings")
+     const collection = await dbConnect("bookings");
+    const bookings = await collection
       .find({ user_email: email })
       .sort({ order_date: -1 })
       .toArray();
@@ -39,8 +40,8 @@ export async function getUserBookings(email) {
 export async function cancelBooking(bookingId) {
   try {
     const { ObjectId } = require("mongodb");
-
-    const result = await dbConnect("bookings").updateOne(
+     const collection = await dbConnect("bookings");
+    const result = await collection.updateOne(
       { 
         _id: new ObjectId(bookingId), 
         status: "Pending"

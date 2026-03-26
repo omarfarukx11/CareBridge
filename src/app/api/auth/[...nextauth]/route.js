@@ -9,27 +9,37 @@ export const authOptions = {
     CredentialsProvider({
       name: "credentials",
       async authorize(credentials) {
-        const { email, password } = credentials;
-
-        const user = await dbConnect("users").findOne({ email: email });
-
-        if (!user) {
-          throw new Error("No user found");
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required");
         }
 
-        const isPasswordMatched = await bcrypt.compare(password, user.password);
+        const userCollection = await dbConnect("users"); 
+        const user = await userCollection.findOne({ email: credentials.email });
+
+        if (!user) {
+          throw new Error("No user found with this email");
+        }
+
+        const isPasswordMatched = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordMatched) {
           throw new Error("Invalid password");
         }
-        return user;
+
+        // Next-auth এর জন্য অবজেক্ট রিটার্ন করুন
+        return {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.role || "user",
+        };
       },
     }),
 
-  GoogleProvider({
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET
-  })
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
 
   callbacks: {
@@ -44,7 +54,7 @@ export const authOptions = {
               name: user.name,
               email: user.email,
               image: user.image,
-              role: "user", // Default role
+              role: "user",
               provider: "google",
               createdAt: new Date().toISOString(),
             });

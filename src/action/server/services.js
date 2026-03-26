@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 
 export const GetServices = async () => { 
     try {
-        const collection = dbConnect('services');
+        const collection = await dbConnect('services');
         const result = await collection.find().toArray();
         console.log(result)
         const services = result.map(service => {

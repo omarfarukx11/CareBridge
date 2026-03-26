@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-// Swapped Lucide for React Icons
+
 import { FaChevronRight, FaChevronLeft, FaArrowRight } from "react-icons/fa6";
 import { HiOutlineArrowRight } from "react-icons/hi2";
 

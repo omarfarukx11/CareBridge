@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
         className={`${poppins.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
        <NextAuthProvider>
-         <Header />
+        <Header />
         <main >{children}</main>
         <Footer />
        </NextAuthProvider>
