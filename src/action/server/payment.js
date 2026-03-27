@@ -29,7 +29,6 @@ export const createCheckoutSession = async (booking) => {
       metadata: {
         bookingId: booking._id.toString(),
       },
-      // ✅ এখানে bookingId যোগ করা হয়েছে
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/myBooking?success=true&bookingId=${booking._id}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/myBooking?canceled=true`,
     });

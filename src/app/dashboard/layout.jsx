@@ -2,14 +2,22 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars } from 'react-icons/fa';
+import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars, FaHistory } from 'react-icons/fa';
 import { signOut } from 'next-auth/react';
 
 const DashboardLayout = ({ children }) => {
     const pathname = usePathname();
 
+    const closeDrawer = () => {
+        const drawerCheckbox = document.getElementById('dashboard-drawer');
+        if (drawerCheckbox) {
+            drawerCheckbox.checked = false;
+        }
+    };
+
     const menuItems = [
         { name: 'My Bookings', icon: <FaCalendarCheck />, path: '/dashboard/myBooking' },
+        { name: 'Payment History', icon: <FaHistory />, path: '/dashboard/paymentHistory' },
         { name: 'Back to Home', icon: <FaHome />, path: '/' },
     ];
 
@@ -35,9 +43,9 @@ const DashboardLayout = ({ children }) => {
             <div className="drawer-side z-50">
                 <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                 
-                <div className="menu p-6 w-[70%] md:w-80 min-h-full bg-black text-white flex flex-col">
+                <div className="menu p-6 w-[75%] md:w-80 min-h-full bg-slate-900 text-white flex flex-col">
                     <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-10 px-4">
-                        <span>Care.Bridge</span>
+                        <span className="text-primary">Care.</span>Bridge
                     </Link>
 
                     <ul className="space-y-2 grow">
@@ -45,9 +53,10 @@ const DashboardLayout = ({ children }) => {
                             <li key={item.path}>
                                 <Link 
                                     href={item.path}
+                                    onClick={closeDrawer}
                                     className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
                                         pathname === item.path 
-                                        ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                                        ? 'bg-primary text-white shadow-lg shadow-primary/20 font-bold' 
                                         : 'text-slate-400 hover:bg-white/5 hover:text-white'
                                     }`}
                                 >
@@ -58,10 +67,13 @@ const DashboardLayout = ({ children }) => {
                         ))}
                     </ul>
 
-                    <div className="mt-auto pt-10">
+                    <div className="mt-auto pt-10 border-t border-white/5">
                         <button 
-                            onClick={() => signOut({ callbackUrl: '/' })}
-                            className="flex items-center gap-4 px-4 py-3 w-full text-error hover:bg-error/10 rounded-xl transition-all font-bold cursor-pointer"
+                            onClick={() => {
+                                closeDrawer();
+                                signOut({ callbackUrl: '/' });
+                            }}
+                            className="flex items-center gap-4 px-4 py-3 w-full text-red-400 hover:bg-red-500/10 rounded-xl transition-all font-bold cursor-pointer"
                         >
                             <FaSignOutAlt />
                             Logout
@@ -70,9 +82,7 @@ const DashboardLayout = ({ children }) => {
                 </div>
             </div>
 
-            {/* 4. Scroll Lock Logic (CSS-only for DaisyUI drawer) */}
             <style jsx global>{`
-                /* When the drawer checkbox is checked, lock the body scroll */
                 body:has(#dashboard-drawer:checked) {
                     overflow: hidden;
                 }

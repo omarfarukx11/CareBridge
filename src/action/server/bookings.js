@@ -2,7 +2,7 @@
 import { dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
-// ১. নতুন বুকিং তৈরি
+
 export async function createBooking(data) {
   try {
     const collection = await dbConnect("bookings");
@@ -17,7 +17,6 @@ export async function createBooking(data) {
   }
 }
 
-// ২. ইউজারের বুকিং লিস্ট ফেচ করা
 export async function getUserBookings(email) {
   try {
     const collection = await dbConnect("bookings");
@@ -35,16 +34,13 @@ export async function getUserBookings(email) {
   }
 }
 
-// ৩. পেমেন্ট কনফার্মেশন এবং হিস্ট্রি সেভ (এটিই স্ট্যাটাস আপডেট করবে)
 export async function confirmBookingPayment(bookingId, sessionData) {
   try {
     const bookingsCollection = await dbConnect("bookings");
     const paymentsCollection = await dbConnect("paymentHistory");
 
-    // ছোট ট্রানজ্যাকশন আইডি (শেষ ১০ ডিজিট)
     const shortId = sessionData.transactionId.substring(sessionData.transactionId.length - 10).toUpperCase();
 
-    // পেমেন্ট রেকর্ড সেভ করা
     await paymentsCollection.insertOne({
       bookingId: bookingId,
       transactionId: `TRX-${shortId}`,
@@ -53,7 +49,6 @@ export async function confirmBookingPayment(bookingId, sessionData) {
       payment_date: new Date().toISOString(),
     });
 
-    // স্ট্যাটাস আপডেট: পেমেন্ট "Paid" এবং সার্ভিস "Confirmed"
     const result = await bookingsCollection.updateOne(
       { _id: new ObjectId(bookingId) },
       { 
@@ -70,7 +65,6 @@ export async function confirmBookingPayment(bookingId, sessionData) {
   }
 }
 
-// ৪. বুকিং ক্যানসেল
 export async function cancelBooking(bookingId) {
   try {
     const collection = await dbConnect("bookings");
