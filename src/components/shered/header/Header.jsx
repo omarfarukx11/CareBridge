@@ -15,23 +15,21 @@ const Header = () => {
 
   const isHomePage = pathname === "/";
 
-  // ১. স্ক্রল হ্যান্ডলার
+
   useEffect(() => {
     const handleScroll = () => {
-      // হোম পেজে থাকলে ১০০ পিক্সেল পর স্ক্রল স্টেট চেঞ্জ হবে
       if (isHomePage) {
         setIsScrolled(window.scrollY > 100);
       } else {
-        setIsScrolled(true); // অন্য পেজে সবসময় স্ক্রলড (সাদা) থাকবে
+        setIsScrolled(true); 
       }
     };
     
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // ইনিশিয়াল চেক
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomePage]);
 
-  // মোবাইল মেনু লক
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
@@ -44,7 +42,6 @@ const Header = () => {
 
   const isActive = (path) => pathname === path;
 
-  // ২. ডাইনামিক ক্লাস লজিক
   const isTransparent = isHomePage && !isScrolled;
 
   const navStyles = isTransparent
@@ -86,7 +83,7 @@ const Header = () => {
           <div className="navbar-end gap-3">
             {status === "authenticated" ? (
               <>
-                <Link href={'/dashboard/myBooking'} className='primary-btn'>
+                <Link href={'/dashboard/myBooking'} className='primary-btn text-[10px] md:text-sm'>
                   Dashboard
                 </Link>
                 <button 
@@ -147,7 +144,6 @@ const Header = () => {
         </AnimatePresence>
       </div>
 
-      {/* ৩. স্পেসার: হোমপেজ ছাড়া অন্য পেজে কন্টেন্ট যেন নেভবারের নিচে না যায় */}
       {!isTransparent && <div className="h-20 w-full"></div>}
     </>
   );

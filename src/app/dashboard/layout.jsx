@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaHome, FaCalendarCheck, FaUser, FaSignOutAlt, FaHandHoldingHeart } from 'react-icons/fa';
+import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars } from 'react-icons/fa';
 import { signOut } from 'next-auth/react';
 
 const DashboardLayout = ({ children }) => {
@@ -14,15 +14,17 @@ const DashboardLayout = ({ children }) => {
     ];
 
     return (
-        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins ">
+        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins max-w-7xl mx-auto">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
             
             <div className="drawer-content flex flex-col">
-                <div className="w-full navbar bg-white border-b border-slate-200 lg:hidden px-4">
-                    <label htmlFor="dashboard-drawer" className="btn btn-ghost drawer-button lg:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </label>
-                    <div className="flex-1 font-bold text-xl">Care.Bridge</div>
+                <div className="w-full navbar bg-white border-b border-slate-200 lg:hidden px-4 sticky top-0 z-30">
+                    <div className="flex-none">
+                        <label htmlFor="dashboard-drawer" className="btn btn-ghost btn-square lg:hidden">
+                            <FaBars className="text-xl" />
+                        </label>
+                    </div>
+                    <div className="flex-1 font-bold text-xl ml-2">Care.Bridge</div>
                 </div>
 
                 <main className="p-4 md:p-8">
@@ -31,14 +33,14 @@ const DashboardLayout = ({ children }) => {
             </div>
 
             <div className="drawer-side z-50">
-                <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
-                <div className="menu p-6 w-80 min-h-full bg-slate-900 text-white">
+                <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+                
+                <div className="menu p-6 w-[70%] md:w-80 min-h-full bg-black text-white flex flex-col">
                     <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-10 px-4">
-                        <FaHandHoldingHeart className="text-primary" />
                         <span>Care.Bridge</span>
                     </Link>
 
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 grow">
                         {menuItems.map((item) => (
                             <li key={item.path}>
                                 <Link 
@@ -59,7 +61,7 @@ const DashboardLayout = ({ children }) => {
                     <div className="mt-auto pt-10">
                         <button 
                             onClick={() => signOut({ callbackUrl: '/' })}
-                            className="flex items-center gap-4 px-4 py-3 w-full text-error hover:bg-error/10 rounded-xl transition-all font-bold"
+                            className="flex items-center gap-4 px-4 py-3 w-full text-error hover:bg-error/10 rounded-xl transition-all font-bold cursor-pointer"
                         >
                             <FaSignOutAlt />
                             Logout
@@ -67,6 +69,14 @@ const DashboardLayout = ({ children }) => {
                     </div>
                 </div>
             </div>
+
+            {/* 4. Scroll Lock Logic (CSS-only for DaisyUI drawer) */}
+            <style jsx global>{`
+                /* When the drawer checkbox is checked, lock the body scroll */
+                body:has(#dashboard-drawer:checked) {
+                    overflow: hidden;
+                }
+            `}</style>
         </div>
     );
 };
