@@ -77,3 +77,47 @@ export async function cancelBooking(bookingId) {
     return { success: false };
   }
 }
+
+
+export async function getAllBookings({ 
+    page = 1, 
+    limit = 20, 
+    statusFilter = "all", 
+    paymentFilter = "all", 
+    sortField = "order_date", 
+    sortOrder = -1 
+}) {
+  try {
+    const collection = await dbConnect("bookings");
+    const skip = (page - 1) * limit;
+
+    let query = {};
+    
+    if (statusFilter !== "all") {
+        query.status = statusFilter;
+    }
+
+    if (paymentFilter !== "all") {
+        query.payment_status = paymentFilter;
+    }
+
+    const bookings = await collection
+      .find(query)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    const totalBookings = await collection.countDocuments(query);
+
+    return {
+      success: true,
+      data: bookings.map(b => ({ ...b, _id: b._id.toString() })),
+      totalPages: Math.ceil(totalBookings / limit),
+      totalCount: totalBookings
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    return { success: false, data: [], totalPages: 0 };
+  }
+}

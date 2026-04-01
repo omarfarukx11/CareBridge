@@ -2,11 +2,14 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars, FaHistory } from 'react-icons/fa';
-import { signOut } from 'next-auth/react';
+import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars, FaHistory, FaUserShield, FaUsers } from 'react-icons/fa';
+import { signOut, useSession } from 'next-auth/react';
 
 const DashboardLayout = ({ children }) => {
     const pathname = usePathname();
+    const { data: session, status } = useSession();
+
+    const userRole = session?.user?.role || 'user';
 
     const closeDrawer = () => {
         const drawerCheckbox = document.getElementById('dashboard-drawer');
@@ -16,10 +19,27 @@ const DashboardLayout = ({ children }) => {
     };
 
     const menuItems = [
-        { name: 'My Bookings', icon: <FaCalendarCheck />, path: '/dashboard/myBooking' },
-        { name: 'Payment History', icon: <FaHistory />, path: '/dashboard/paymentHistory' },
-        { name: 'Back to Home', icon: <FaHome />, path: '/' },
+        { name: 'My Bookings', icon: <FaCalendarCheck />, path: '/dashboard/myBooking', roles: ['user'] },
+        { name: 'Payment History', icon: <FaHistory />, path: '/dashboard/paymentHistory', roles: ['user'] },
+        { name: 'Admin Panel', icon: <FaUserShield />, path: '/dashboard/adminPanel', roles: ['admin', 'superadmin'] },
+        { name: 'All Bookings', icon: <FaUserShield />, path: '/dashboard/allBooking', roles: ['admin', 'superadmin'] },
+        { name: 'Manage Users', icon: <FaUsers />, path: '/dashboard/manageUsers', roles: ['superadmin'] },
+        { name: 'Back to Home', icon: <FaHome />, path: '/', roles: ['user', 'admin', 'superadmin'] },
     ];
+
+    const filteredMenu = menuItems.filter(item => item.roles.includes(userRole));
+
+
+    const currentItem = menuItems.find(item => item.path === pathname);
+    const isAuthorized = !currentItem || currentItem.roles.includes(userRole);
+
+    if (status === "loading") {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-slate-50">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        );
+    }
 
     return (
         <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins max-w-7xl mx-auto">
@@ -36,10 +56,19 @@ const DashboardLayout = ({ children }) => {
                 </div>
 
                 <main className="p-4 md:p-8">
-                    {children}
+                    {isAuthorized ? (
+                        children
+                    ) : (
+                        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                            <h2 className="text-2xl font-bold text-red-500">Access Denied</h2>
+                            <p className="text-slate-600 mt-2">You don't have permission to access this area.</p>
+                            <Link href="/" className="btn btn-primary mt-4">Return Home</Link>
+                        </div>
+                    )}
                 </main>
             </div>
 
+            {/* Sidebar */}
             <div className="drawer-side z-50">
                 <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                 
@@ -49,7 +78,7 @@ const DashboardLayout = ({ children }) => {
                     </Link>
 
                     <ul className="space-y-2 grow">
-                        {menuItems.map((item) => (
+                        {filteredMenu.map((item) => (
                             <li key={item.path}>
                                 <Link 
                                     href={item.path}
@@ -68,6 +97,13 @@ const DashboardLayout = ({ children }) => {
                     </ul>
 
                     <div className="mt-auto pt-10 border-t border-white/5">
+                        <div className="px-4 mb-4">
+                            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Role</p>
+                            <p className="text-xs text-slate-300 font-medium bg-white/5 inline-block px-2 py-1 rounded mt-1 capitalize">
+                                {userRole}
+                            </p>
+                        </div>
+
                         <button 
                             onClick={() => {
                                 closeDrawer();

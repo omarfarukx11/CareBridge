@@ -4,7 +4,8 @@ import { dbConnect } from "@/lib/dbConnect"
 import bcrypt from "bcryptjs"
 
 export const postUser = async (payload) => { 
-    const isExist = await dbConnect('users').findOne({email:payload.email});
+    const collection = await dbConnect('users')
+    const isExist = await collection.findOne({email:payload.email});
     if(isExist) {
         return {
             success:false,
@@ -19,8 +20,8 @@ export const postUser = async (payload) => {
         password : hasPassword
 
     }
-
-    const result = await dbConnect('users').insertOne(newUser)
+    
+    const result = await collection.insertOne(newUser)
     if(result.acknowledged) {
         return {
             success : true,

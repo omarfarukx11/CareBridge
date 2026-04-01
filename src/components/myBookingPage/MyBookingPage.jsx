@@ -32,7 +32,6 @@ const BookingContent = () => {
     const verify = async () => {
       if (success === "true" && bId && bookings.length > 0) {
         const target = bookings.find(b => b._id === bId);
-        // যদি পেমেন্ট স্ট্যাটাস Paid না থাকে তবেই আপডেট হবে
         if (target && target.payment_status !== "Paid") {
           Swal.fire({ title: "Processing Payment...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
