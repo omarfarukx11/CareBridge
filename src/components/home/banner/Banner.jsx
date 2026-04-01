@@ -3,10 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
 import { FaChevronRight, FaChevronLeft, FaArrowRight } from "react-icons/fa6";
-import { HiOutlineArrowRight } from "react-icons/hi2";
-
 
 const Banner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,12 +50,13 @@ const Banner = () => {
     setCurrentIndex((prev) => (prev + newDirection + displayData.length) % displayData.length);
   }, [displayData.length]);
 
+  // Set to 5000ms (5 seconds)
   useEffect(() => {
     const timer = setInterval(() => {
       if (document.visibilityState === "visible" && !isAnimatingRef.current) {
         paginate(1);
       }
-    }, 8000);
+    }, 5000); 
     return () => clearInterval(timer);
   }, [paginate]);
 
@@ -100,7 +98,7 @@ const Banner = () => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-neutral-950 h-[65vh] md:min-h-[calc(100vh-80px)]">
+    <section className="relative w-full overflow-hidden bg-neutral-950 h-[70vh] lg:h-screen">
       <AnimatePresence 
         initial={false} 
         custom={direction} 
@@ -120,13 +118,13 @@ const Banner = () => {
             setIsAnimating(true);
             isAnimatingRef.current = true;
           }}
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full lg:w-screen lg:h-screen"
         >
-          <div className="absolute inset-0 z-10 bg-linear-to-t from-neutral-950 via-black/40 to-black/20" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-black/40 to-black/10" />
           <Image
             fill
             src={displayData[currentIndex].image}
-            alt="Caregiving Banner"
+            alt="Banner Image"
             className="object-cover"
             priority
             sizes="100vw"
@@ -135,7 +133,7 @@ const Banner = () => {
       </AnimatePresence>
 
       <div className="relative z-30 h-full w-full">
-        <div className="mx-auto h-full max-w-340 px-6 lg:px-12 flex flex-col justify-center">
+        <div className="mx-auto h-full max-w-7xl px-6 lg:px-12 flex flex-col justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
@@ -143,11 +141,11 @@ const Banner = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="max-w-4xl pointer-events-auto"
+              className="max-w-4xl"
             >
               <motion.div variants={contentVariants} className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-px bg-base-200" />
-                <span className="text-base-200 font-bold uppercase tracking-[0.2em] text-xs md:text-sm">
+                <div className="w-12 h-px bg-white/60" />
+                <span className="text-white/80 font-bold uppercase tracking-[0.2em] text-xs md:text-sm">
                   {displayData[currentIndex].tagline}
                 </span>
               </motion.div>
@@ -155,7 +153,7 @@ const Banner = () => {
               <div className="overflow-hidden mb-10">
                 <motion.h1 
                   variants={titleVariants}
-                  className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight"
+                  className="text-4xl md:text-6xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight"
                 >
                    {displayData[currentIndex].title}
                 </motion.h1>
@@ -163,8 +161,7 @@ const Banner = () => {
 
               <motion.div variants={contentVariants}>
                 <Link href="/services">
-                  {/* Using your utility Button */}
-                  <button className="flex items-center gap-4 bg-base-200 text-neutral-900 group border-none py-2 rounded-sm px-10 text-lg">
+                  <button className="flex items-center gap-4 bg-white text-neutral-950 group border-none py-3 rounded-full px-10 text-lg font-bold hover:bg-neutral-100 transition-all">
                     Explore Services
                     <span className="bg-neutral-950/10 p-2 rounded-full group-hover:bg-neutral-950 group-hover:text-white transition-colors">
                       <FaArrowRight size={18} />
@@ -176,10 +173,9 @@ const Banner = () => {
           </AnimatePresence>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-340 px-6 lg:px-12 z-40 flex items-center justify-between pointer-events-none">
-          
-          <div className="flex items-baseline gap-2 font-black text-white/90 bg-black/20 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/10 pointer-events-auto">
-            <span className="text-3xl md:text-4xl text-base-200 font-mono">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-7xl px-6 lg:px-12 z-40 flex items-center justify-between">
+          <div className="flex items-baseline gap-2 font-black text-white/90 bg-black/20 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/10">
+            <span className="text-3xl md:text-4xl text-white font-mono">
                 {String(currentIndex + 1).padStart(2, '0')}
             </span>
             <span className="text-sm opacity-40 uppercase tracking-widest font-sans">
@@ -187,17 +183,16 @@ const Banner = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-3 pointer-events-auto">
+          <div className="flex items-center gap-3">
             <button 
               onClick={() => paginate(-1)}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white backdrop-blur-md hover:bg-base-200 hover:text-neutral-900 transition-all cursor-pointer group"
+              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-neutral-900 transition-all group"
             >
               <FaChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
             </button>
-            
             <button 
               onClick={() => paginate(1)}
-              className="w-14 h-14 rounded-full bg-base-200 text-neutral-900 flex items-center justify-center hover:bg-white transition-all shadow-lg cursor-pointer group"
+              className="w-14 h-14 rounded-full bg-white text-neutral-900 flex items-center justify-center hover:bg-neutral-100 transition-all shadow-lg group"
             >
               <FaChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -210,7 +205,7 @@ const Banner = () => {
               <button
                 key={i}
                 onClick={() => i !== currentIndex && paginate(i > currentIndex ? 1 : -1)}
-                className={`w-1 transition-all duration-700 rounded-full ${currentIndex === i ? 'h-12 bg-base-200 shadow-[0_0_15px_rgba(255,255,255,0.3)]' : 'h-6 bg-white/20 hover:bg-white/50'}`}
+                className={`w-1 transition-all duration-700 rounded-full ${currentIndex === i ? 'h-12 bg-white' : 'h-6 bg-white/20 hover:bg-white/50'}`}
               />
           ))}
       </div>
