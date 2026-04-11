@@ -2,6 +2,7 @@
 "use server"
 import { dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
+import { getServerSession } from "next-auth";
 
 export async function getAllUsers({ page = 1, limit = 10, searchTerm = "" }) {
     try {

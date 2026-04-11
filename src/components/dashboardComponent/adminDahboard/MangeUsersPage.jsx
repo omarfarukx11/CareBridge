@@ -25,7 +25,7 @@ const ManageUsersContent = () => {
         setLoading(false);
     };
 
-    // Debounced Search Effect
+
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             fetchUsers();
@@ -84,7 +84,7 @@ const ManageUsersContent = () => {
                     <input 
                         type="text" 
                         placeholder="Search by name or email..." 
-                        className="input input-bordered w-full pl-12 rounded-2xl bg-white border-slate-200 focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
+                        className="input input-bordered w-full pl-12 rounded-lg outline-none bg-white border-slate-200 focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
                         value={searchTerm}
                         onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
                     />
@@ -92,13 +92,11 @@ const ManageUsersContent = () => {
                 </div>
             </div>
 
-            {/* Warning Alert for Self-Edit */}
             <div className="mb-6 flex items-center gap-3 p-4 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-sm">
                 <FaInfoCircle className="shrink-0" />
                 <span>Note: You cannot modify your own role to prevent accidental lockout from the Superadmin panel.</span>
             </div>
 
-            {/* Table Area */}
             <div className="overflow-x-auto bg-white border border-slate-100 rounded-3xl shadow-sm">
                 <table className="table w-full border-collapse">
                     <thead className="bg-slate-50/80 text-slate-500">
@@ -145,15 +143,15 @@ const ManageUsersContent = () => {
                                             <div className="flex justify-end">
                                                 <select 
                                                     disabled={isMe}
-                                                    className={`select select-sm select-bordered rounded-xl text-xs font-bold border-slate-200 transition-all ${
+                                                    className={`select select-sm select-bordered outline-none rounded-lg text-xs font-bold border-slate-200 transition-all ${
                                                         isMe ? 'bg-slate-100 cursor-not-allowed opacity-40' : 'bg-slate-50 hover:border-primary'
                                                     }`}
                                                     value={user.role || 'user'}
                                                     onChange={(e) => handleRoleChange(user._id, user.name, user.role, e.target.value)}
                                                 >
-                                                    <option value="user">User Access</option>
-                                                    <option value="admin">Admin Privilege</option>
-                                                    <option value="superadmin">Superadmin Power</option>
+                                                    <option value="user">User </option>
+                                                    <option value="professional">Professional</option>
+                                                    <option value="admin">Admin </option>
                                                 </select>
                                             </div>
                                         </td>
@@ -167,7 +165,6 @@ const ManageUsersContent = () => {
                 </table>
             </div>
 
-            {/* Pagination Controls */}
             <div className="flex justify-between items-center mt-8 px-4 pb-12">
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
                     Showing Page {page} of {totalPages}

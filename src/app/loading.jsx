@@ -3,7 +3,7 @@ import { FaHeartbeat } from 'react-icons/fa';
 
 const Loader = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-100 w-full bg-white/50 backdrop-blur-sm animate-in fade-in duration-500">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-white/50 backdrop-blur-sm animate-in fade-in duration-500">
       <div className="relative flex items-center justify-center">
         {/* Outer Ripples */}
         <div className="absolute w-24 h-24 bg-primary/20 rounded-full animate-ping"></div>

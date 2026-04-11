@@ -97,12 +97,6 @@ const DashboardLayout = ({ children }) => {
                     </ul>
 
                     <div className="mt-auto pt-10 border-t border-white/5">
-                        <div className="px-4 mb-4">
-                            <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Role</p>
-                            <p className="text-xs text-slate-300 font-medium bg-white/5 inline-block px-2 py-1 rounded mt-1 capitalize">
-                                {userRole}
-                            </p>
-                        </div>
 
                         <button 
                             onClick={() => {
