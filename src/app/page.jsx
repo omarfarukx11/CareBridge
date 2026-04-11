@@ -1,6 +1,7 @@
 import { GetServices } from "@/action/server/services";
 import AboutSection from "@/components/home/AboutSection/AboutSection";
 import Banner from "@/components/home/banner/Banner";
+import Faq from "@/components/home/faq/Faq";
 import SuccessMetrics from "@/components/home/SuccessMetrics/SuccessMetrics";
 import Testimonials from "@/components/home/Testimonials/Testimonials";
 import TopServicesPage from "@/components/home/topServices/TopServicesPage";
@@ -19,6 +20,7 @@ export default async function Home() {
       <SuccessMetrics></SuccessMetrics>
       <WhyChooseUs></WhyChooseUs>
       <Testimonials></Testimonials>
+      <Faq></Faq>
     </div>
   );
 }

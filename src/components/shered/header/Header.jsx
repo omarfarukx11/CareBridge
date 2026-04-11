@@ -15,7 +15,7 @@ const Header = () => {
 
   const isHomePage = pathname === "/";
   
-  // Dynamic Dashboard Path Logic
+
   const getDashboardPath = () => {
     const role = session?.user?.role;
     if (role === "superadmin" || role === "admin") return "/dashboard/adminPanel";
@@ -87,13 +87,13 @@ const Header = () => {
                 </Link>
                 <button 
                   onClick={() => signOut()} 
-                  className="hidden lg:flex btn bg-red-600 hover:bg-red-700 border-none text-white btn-sm md:btn-md"
+                  className="hidden lg:flex  "
                 >
-                  <IoLogOutOutline className='text-xl' />
+                  <IoLogOutOutline className='text-2xl text-red-600 font-extrabold hover:scale-110 cursor-pointer' />
                 </button>
               </>
             ) : (
-              <Link href="/login" className="btn btn-primary btn-sm md:btn-md text-white px-6">Login</Link>
+              <Link href="/login" className="btn primary-btn btn-sm md:btn-md text-white px-6">Login</Link>
             )}
           </div>
         </div>

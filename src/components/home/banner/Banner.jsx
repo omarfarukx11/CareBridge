@@ -120,7 +120,7 @@ const Banner = () => {
           }}
           className="absolute inset-0 w-full h-full lg:w-screen lg:h-screen"
         >
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-neutral-950 via-black/40 to-black/10" />
+          <div className="absolute inset-0 z-10 bg-linear-to-t from-neutral-950 via-black/40 to-black/10" />
           <Image
             fill
             src={displayData[currentIndex].image}
@@ -174,14 +174,7 @@ const Banner = () => {
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-7xl px-6 lg:px-12 z-40 flex items-center justify-between">
-          <div className="flex items-baseline gap-2 font-black text-white/90 bg-black/20 backdrop-blur-md px-5 py-2 rounded-2xl border border-white/10">
-            <span className="text-3xl md:text-4xl text-white font-mono">
-                {String(currentIndex + 1).padStart(2, '0')}
-            </span>
-            <span className="text-sm opacity-40 uppercase tracking-widest font-sans">
-                / {String(displayData.length).padStart(2, '0')}
-            </span>
-          </div>
+          <div></div>
 
           <div className="flex items-center gap-3">
             <button 

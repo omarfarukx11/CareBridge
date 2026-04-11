@@ -34,7 +34,7 @@ const Testimonials = () => {
           transition={{ delay: 0.2 }}
           className="text-5xl md:text-7xl font-black text-white mt-6 tracking-tighter"
         >
-          Trusted by <span className="text-primary italic">12k+</span> Families
+          Trusted by <span className="text-primary ">12k+</span> Families
         </motion.h2>
       </div>
 
@@ -66,7 +66,7 @@ const Testimonials = () => {
                     <FaStar key={j} className="text-orange-400 text-sm" />
                   ))}
                 </div>
-                <p className="text-xl text-slate-200 font-medium leading-relaxed whitespace-normal italic">
+                <p className="text-xl text-slate-200 font-medium leading-relaxed whitespace-normal ">
                   "{rev.text}"
                 </p>
               </div>
