@@ -69,15 +69,32 @@ export const authOptions = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
-        token.id = user.id;
+        token.id = user.id ?? token.id;
+        token.role = user.role ?? token.role;
+        token.image = user.image || token.image;
       }
+
+      if (!token.role && token.email) {
+        try {
+          const db = await dbConnect("users");
+          const existingUser = await db.findOne({ email: token.email });
+          if (existingUser) {
+            token.role = existingUser.role || "user";
+            token.id = existingUser._id.toString();
+            token.image = existingUser.image || token.image;
+          }
+        } catch (error) {
+          console.error("Error loading user role from DB in jwt callback:", error);
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.role = token.role;
         session.user.id = token.id;
+        session.user.image = token.image;
       }
       return session;
     },

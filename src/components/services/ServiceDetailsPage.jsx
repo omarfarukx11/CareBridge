@@ -22,7 +22,7 @@ import Image from "next/image";
 import NotFound from "@/app/not-found";
 
 const ServiceDetailsPage = ({ service }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [bookingType, setBookingType] = useState("hour");
 
@@ -85,8 +85,20 @@ const ServiceDetailsPage = ({ service }) => {
   const totalCost =
     (bookingType === "hour" ? hRate : dRate) * (Number(currentDuration) || 0);
 
+  const userRole = session?.user?.role || null;
+  const isRestrictedRole = status === "authenticated" && ["admin", "professional", "superadmin"].includes(userRole);
+  const canBookOnPage = status !== "loading" && !isRestrictedRole;
+
   const onSubmit = async (data) => {
     if (!session) return router.push("/login");
+    if (isRestrictedRole) {
+      return Swal.fire({
+        icon: "warning",
+        title: "Booking not allowed",
+        text: "Admin, superadmin, and professional accounts cannot book services.",
+      });
+    }
+
     Swal.fire({ title: "Processing...", didOpen: () => Swal.showLoading() });
 
     const result = await createBooking({
@@ -289,16 +301,36 @@ const ServiceDetailsPage = ({ service }) => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => document.getElementById("b_modal").showModal()}
-                  className="primary-btn w-full"
-                >
-                  Book Now <FaArrowRight />
-                </button>
+                {status === "loading" ? (
+                  <div className="rounded-3xl p-8 bg-slate-900/80 border border-white/10">
+                    <p className="text-white text-sm font-bold mb-3">Checking Access...</p>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      Please wait while we validate your account before booking.
+                    </p>
+                  </div>
+                ) : isRestrictedRole ? (
+                  <div className="rounded-3xl p-8 bg-slate-900/80 border border-white/10">
+                    <p className="text-white text-sm font-bold mb-3">Booking Disabled</p>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      Admin and professional accounts are not allowed to book services.
+                      Please use a regular user account to place a booking.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => document.getElementById("b_modal").showModal()}
+                      className="primary-btn w-full"
+                    >
+                      Book Now <FaArrowRight />
+                    </button>
 
-                <p className="text-center text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-                  Secure Process • No Payment Required Now
-                </p>
+                    <p className="text-center text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                      Secure Process • No Payment Required Now
+                    </p>
+                  </>
+                )}
               </div>
 
               {/* Trust Footer */}
@@ -312,10 +344,11 @@ const ServiceDetailsPage = ({ service }) => {
         </div>
       </div>
 
-      <dialog
-        id="b_modal"
-        className="modal modal-bottom sm:modal-middle backdrop-blur-md overflow-y-auto"
-      >
+      {status !== "loading" && !isRestrictedRole && (
+        <dialog
+          id="b_modal"
+          className="modal modal-bottom sm:modal-middle backdrop-blur-md overflow-y-auto"
+        >
         <div className="modal-box max-w-4xl p-0 bg-white rounded-lg shadow-2xl border-none h-fit my-6 sm:my-12 mx-auto">
           <div className="bg-[#0f172a] p-8 md:p-10 text-white relative">
             <form method="dialog">
@@ -507,6 +540,7 @@ const ServiceDetailsPage = ({ service }) => {
           </form>
         </div>
       </dialog>
+      )}
     </div>
   );
 };

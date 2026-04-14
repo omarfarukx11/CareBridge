@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars, FaHistory, FaUserShield, FaUsers } from 'react-icons/fa';
+import { FaHome, FaCalendarCheck, FaSignOutAlt, FaBars, FaHistory, FaUserShield, FaUsers, FaBriefcase, FaUser } from 'react-icons/fa';
 import { signOut, useSession } from 'next-auth/react';
 
 const DashboardLayout = ({ children }) => {
@@ -19,12 +19,14 @@ const DashboardLayout = ({ children }) => {
     };
 
     const menuItems = [
+        { name: 'Profile', icon: <FaUser />, path: '/dashboard/profile', roles: ['user', 'admin', 'superadmin', 'professional'] },
         { name: 'My Bookings', icon: <FaCalendarCheck />, path: '/dashboard/myBooking', roles: ['user'] },
         { name: 'Payment History', icon: <FaHistory />, path: '/dashboard/paymentHistory', roles: ['user'] },
         { name: 'Admin Panel', icon: <FaUserShield />, path: '/dashboard/adminPanel', roles: ['admin', 'superadmin'] },
         { name: 'All Bookings', icon: <FaUserShield />, path: '/dashboard/allBooking', roles: ['admin', 'superadmin'] },
+        { name: 'My Work', icon: <FaBriefcase />, path: '/dashboard/professionalWork', roles: ['professional'] },
         { name: 'Manage Users', icon: <FaUsers />, path: '/dashboard/manageUsers', roles: ['superadmin'] },
-        { name: 'Back to Home', icon: <FaHome />, path: '/', roles: ['user', 'admin', 'superadmin'] },
+        { name: 'Back to Home', icon: <FaHome />, path: '/', roles: ['user', 'admin', 'superadmin', 'professional'] },
     ];
 
     const filteredMenu = menuItems.filter(item => item.roles.includes(userRole));
@@ -42,7 +44,7 @@ const DashboardLayout = ({ children }) => {
     }
 
     return (
-        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins max-w-7xl mx-auto">
+        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins w-full">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
             
             <div className="drawer-content flex flex-col">
@@ -73,9 +75,14 @@ const DashboardLayout = ({ children }) => {
                 <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                 
                 <div className="menu p-6 w-[75%] md:w-80 min-h-full bg-slate-900 text-white flex flex-col">
-                    <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-10 px-4">
+                    <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-2 px-4">
                         <span className="text-primary">Care.</span>Bridge
                     </Link>
+                    <div className="rounded-3xl bg-slate-800 border border-white/10 p-4 mb-8">
+                        <p className="text-xs uppercase tracking-[2px] text-slate-400">Signed in as</p>
+                        <p className="mt-2 font-bold text-white truncate">{session?.user?.name || session?.user?.email}</p>
+                        <p className="text-xs text-slate-400 mt-1">{userRole === 'professional' ? 'Professional' : userRole === 'admin' ? 'Admin' : userRole === 'superadmin' ? 'Superadmin' : 'User'}</p>
+                    </div>
 
                     <ul className="space-y-2 grow">
                         {filteredMenu.map((item) => (

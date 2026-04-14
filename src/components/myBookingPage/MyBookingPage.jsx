@@ -2,7 +2,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { FaCalendarAlt, FaCheckCircle, FaCreditCard, FaSearch, FaTrashAlt, FaClock } from "react-icons/fa";
+import { FaCalendarAlt, FaCheckCircle, FaCreditCard, FaSearch, FaTrashAlt, FaClock, FaTimesCircle } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { cancelBooking, confirmBookingPayment, getUserBookings } from "@/action/server/bookings";
 import { createCheckoutSession } from "@/action/server/payment";
@@ -78,7 +78,7 @@ const BookingContent = () => {
           <thead className="bg-slate-50/80 text-slate-500">
             <tr className="border-b border-slate-100">
               <th className="py-4 font-bold text-[11px] uppercase tracking-wider">Service Details</th>
-              <th className="font-bold text-[11px] uppercase tracking-wider text-center">Service Status</th>
+              <th className="font-bold text-[11px] uppercase tracking-wider text-center">Work Status</th>
               <th className="font-bold text-[11px] uppercase tracking-wider text-center">Payment</th>
               <th className="font-bold text-[11px] uppercase tracking-wider text-right">Action</th>
             </tr>
@@ -109,7 +109,11 @@ const BookingContent = () => {
                 </td>
                 <td className="text-right">
                   <div className="flex justify-end gap-2">
-                    {booking.payment_status !== "Paid" && booking.status !== "Cancelled" ? (
+                    {booking.status === "Cancelled" ? (
+                      <div className="flex items-center gap-1 text-red-500 font-bold text-xs uppercase px-3 py-1">
+                        <FaTimesCircle /> Cancelled
+                      </div>
+                    ) : booking.payment_status !== "Paid" ? (
                       <>
                         <button onClick={() => createCheckoutSession(booking)} className="btn btn-sm btn-primary rounded-xl px-2 normal-case font-bold shadow-sm shadow-primary/20">
                           <FaCreditCard />
@@ -120,7 +124,7 @@ const BookingContent = () => {
                       </>
                     ) : (
                       <div className="flex items-center gap-1 text-emerald-500 font-bold text-xs uppercase px-3 py-1">
-                        <FaCheckCircle /> Completed
+                        <FaCheckCircle /> {booking.status === "Confirmed" ? "Confirmed" : booking.status || "Completed"}
                       </div>
                     )}
                   </div>

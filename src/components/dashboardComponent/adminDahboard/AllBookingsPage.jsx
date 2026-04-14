@@ -1,7 +1,10 @@
 "use client";
 import React, { useEffect, useState, Suspense } from "react";
-import { FaCalendarAlt, FaSearch, FaTrashAlt, FaUser, FaChevronLeft, FaChevronRight, FaFilter, FaSortAmountDown, FaWallet } from "react-icons/fa";
+import { FaCalendarAlt, FaSearch, FaTrashAlt, FaUser, FaChevronLeft, FaChevronRight, FaFilter, FaSortAmountDown, FaWallet, FaUserMd } from "react-icons/fa";
+import Swal from "sweetalert2";
+import { useSession } from "next-auth/react";
 import { getAllBookings } from "@/action/server/bookings";
+import { getNearbyProfessionals, assignProfessional } from "@/action/server/professionals";
 
 const AllBookingsContent = () => {
   const [bookings, setBookings] = useState([]);
@@ -14,6 +17,14 @@ const AllBookingsContent = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all"); // New State
   const [sortConfig, setSortConfig] = useState({ field: "order_date", order: -1 });
+  const { data: session } = useSession();
+  const userRole = session?.user?.role || "user";
+
+  // State for Assign Professional Modal
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [professionals, setProfessionals] = useState([]);
+  const [assigning, setAssigning] = useState(false);
 
   const fetchAllData = async () => {
     setLoading(true);
@@ -35,13 +46,50 @@ const AllBookingsContent = () => {
   // Re-fetch when any control changes
   useEffect(() => { fetchAllData(); }, [page, statusFilter, paymentFilter, sortConfig]);
 
+  const handleAssignProfessional = async (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+    // Fetch nearby professionals
+    const res = await getNearbyProfessionals(booking.division, booking.district, booking.area);
+    if (res.success) {
+      setProfessionals(res.data);
+    } else {
+      alert("Failed to fetch professionals");
+    }
+  };
+
+  const handleAssign = async (professionalId) => {
+    setAssigning(true);
+    const res = await assignProfessional(selectedBooking._id, professionalId);
+    if (res.success) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Professional assigned successfully",
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+      });
+      setShowModal(false);
+      fetchAllData(); // Refresh bookings
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Assignment failed",
+        text: res.message || "Failed to assign professional",
+      });
+    }
+    setAssigning(false);
+  };
+
   const filtered = bookings.filter(b => 
     b.service_title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     b.user_email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <div className="mb-8">
         <h1 className="text-2xl font-black text-slate-800 tracking-tight mb-6">Admin: All Bookings</h1>
         
@@ -123,6 +171,7 @@ const AllBookingsContent = () => {
                 <thead className="bg-slate-50/80 text-slate-500">
                     <tr className="border-b border-slate-100">
                         <th className="py-4 font-bold text-[11px] uppercase tracking-wider">User & Service</th>
+                        <th className="font-bold text-[11px] uppercase tracking-wider text-center">Location</th>
                         <th className="font-bold text-[11px] uppercase tracking-wider text-center">Status</th>
                         <th className="font-bold text-[11px] uppercase tracking-wider text-center">Payment</th>
                         <th className="font-bold text-[11px] uppercase tracking-wider text-right">Actions</th>
@@ -141,12 +190,20 @@ const AllBookingsContent = () => {
                             </div>
                         </td>
                         <td className="text-center">
+                            <div className="text-sm font-medium text-slate-700">{booking.division}</div>
+                            <div className="text-xs text-slate-500">{booking.district}, {booking.area}</div>
+                        </td>
+                        <td className="text-center">
                             <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
+                                booking.status === 'Assigned' ? 'bg-indigo-100 text-indigo-600' : 
                                 booking.status === 'Confirmed' ? 'bg-emerald-100 text-emerald-600' : 
                                 booking.status === 'Cancelled' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
                             }`}>
                                 {booking.status || 'Pending'}
                             </span>
+                            {booking.assigned_professional_name && (
+                              <div className="text-[10px] text-slate-500 mt-1">Assigned: {booking.assigned_professional_name}</div>
+                            )}
                         </td>
                         <td className="text-center">
                             <div className={`badge badge-sm border-none font-bold py-3 px-4 rounded-lg ${
@@ -157,9 +214,23 @@ const AllBookingsContent = () => {
                         </td>
                         <td className="text-right">
                             <div className="flex justify-end gap-2">
-                                <button className="btn btn-sm btn-ghost text-red-400 hover:bg-red-50 rounded-xl">
-                                    <FaTrashAlt />
-                                </button>
+                                {booking.assigned_professional || booking.assigned_professional_name ? (
+                                  <button className="btn btn-sm btn-outline btn-success rounded-xl normal-case" disabled>
+                                    Assigned{booking.assigned_professional_name ? `: ${booking.assigned_professional_name}` : ''}
+                                  </button>
+                                ) : booking.payment_status === 'Paid' ? (
+                                    <button 
+                                        className="btn btn-sm btn-primary text-white hover:bg-primary-focus rounded-xl"
+                                        onClick={() => handleAssignProfessional(booking)}
+                                    >
+                                        <FaUserMd /> Assign
+                                    </button>
+                                ) : null}
+                                {!(userRole === 'admin' || userRole === 'superadmin') && (
+                                  <button className="btn btn-sm btn-ghost text-red-400 hover:bg-red-50 rounded-xl">
+                                      <FaTrashAlt />
+                                  </button>
+                                )}
                             </div>
                         </td>
                     </tr>
@@ -189,6 +260,41 @@ const AllBookingsContent = () => {
             <FaChevronRight />
         </button>
       </div>
+
+      {/* Assign Professional Modal */}
+      {showModal && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-2xl">
+            <h3 className="font-bold text-lg mb-4">Assign Professional</h3>
+            <p className="mb-4">Select a nearby professional for this booking:</p>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {professionals.length === 0 ? (
+                <p className="text-center text-slate-500">No available professionals in this area.</p>
+              ) : (
+                professionals.map((prof) => (
+                  <div key={prof._id} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                    <div>
+                      <div className="font-semibold">{prof.name}</div>
+                      <div className="text-sm text-slate-600">{prof.email} • {prof.contact}</div>
+                      <div className="text-xs text-slate-500">Exp: {prof.experience} • Rating: {prof.rating}/5</div>
+                    </div>
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => handleAssign(prof._id)}
+                      disabled={assigning}
+                    >
+                      {assigning ? "Assigning..." : "Assign"}
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="modal-action">
+              <button className="btn" onClick={() => setShowModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
