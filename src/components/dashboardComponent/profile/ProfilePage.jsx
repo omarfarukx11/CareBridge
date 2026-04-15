@@ -14,6 +14,9 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   const {
     register,
@@ -60,6 +63,15 @@ const ProfilePage = () => {
     fetchProfile();
   }, [session, status, reset]);
 
+  // Cleanup preview URL to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const divisions = useMemo(
     () => (locationsData ? [...new Set(locationsData.map((l) => l.region))] : []),
     [],
@@ -79,33 +91,58 @@ const ProfilePage = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
-
-    if (!cloudName || !uploadPreset) {
-      Swal.fire("Upload Error", "Cloudinary is not configured.", "error");
-      return;
-    }
+    // Create preview URL
+    const preview = URL.createObjectURL(file);
+    setPreviewUrl(preview);
+    setSelectedFile(file);
 
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
+    formData.append('file', file);
 
     try {
       setUploading(true);
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-        method: "POST",
+      const response = await fetch('/api/upload', {
+        method: 'POST',
         body: formData,
       });
+
       const data = await response.json();
-      if (data.secure_url) {
-        setImageUrl(data.secure_url);
-        Swal.fire("Uploaded", "Profile image uploaded successfully.", "success");
+
+      if (data.success) {
+        setImageUrl(data.url);
+        setPreviewUrl(""); // Clear preview after successful upload
+        setSelectedFile(null);
+        // Clear the file input
+        event.target.value = "";
+        Swal.fire({
+          icon: "success",
+          title: "Image Uploaded!",
+          text: "Your profile picture has been uploaded successfully.",
+          timer: 2000,
+          showConfirmButton: false
+        });
       } else {
-        Swal.fire("Upload Error", "Could not upload image.", "error");
+        Swal.fire({
+          icon: "error",
+          title: "Upload Failed",
+          text: data.error || "Could not upload image.",
+        });
+        // Clear preview on error
+        setPreviewUrl("");
+        setSelectedFile(null);
+        event.target.value = "";
       }
     } catch (error) {
-      Swal.fire("Upload Error", "Could not upload image.", "error");
+      console.error('Upload error:', error);
+      Swal.fire({
+        icon: "error",
+        title: "Upload Error",
+        text: "Could not upload image. Please try again.",
+      });
+      // Clear preview on error
+      setPreviewUrl("");
+      setSelectedFile(null);
+      event.target.value = "";
     } finally {
       setUploading(false);
     }
@@ -122,13 +159,34 @@ const ProfilePage = () => {
       image: imageUrl,
     };
 
-    const res = await updateUserProfile(payload);
-    if (res.success) {
-      Swal.fire("Success", "Profile updated successfully.", "success");
-      setProfile({ ...profile, ...payload });
-      router.refresh();
-    } else {
-      Swal.fire("Error", res.message || "Could not update profile.", "error");
+    try {
+      setUpdating(true);
+      const res = await updateUserProfile(payload);
+      if (res.success) {
+        setProfile({ ...profile, ...payload });
+        Swal.fire({
+          icon: "success",
+          title: "Profile Updated!",
+          text: "Your profile has been updated successfully.",
+          timer: 3000,
+          showConfirmButton: false
+        });
+        router.refresh();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Update Failed",
+          text: res.message || "Could not update profile.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Update Error",
+        text: "Something went wrong. Please try again.",
+      });
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -156,19 +214,42 @@ const ProfilePage = () => {
           <p className="text-slate-500 mt-2">Update your personal details, profile image, and location information.</p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-3xl overflow-hidden border border-slate-200 bg-slate-100">
-            {imageUrl ? (
-              <img src={imageUrl} alt="profile" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-slate-400">
-                <FaUserMd className="text-3xl" />
+          <div className="relative">
+            <div className="w-24 h-24 rounded-3xl overflow-hidden border-2 border-slate-200 bg-slate-100">
+              {previewUrl ? (
+                <img src={previewUrl} alt="preview" className="w-full h-full object-cover" />
+              ) : imageUrl ? (
+                <img src={imageUrl} alt="profile" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                  <FaUserMd className="text-4xl" />
+                </div>
+              )}
+            </div>
+            {uploading && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-3xl flex items-center justify-center">
+                <span className="loading loading-spinner loading-sm text-white"></span>
               </div>
             )}
           </div>
-          <label className="btn btn-sm btn-outline gap-2 normal-case">
-            <FaCloudUploadAlt /> Change Photo
-            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-          </label>
+          <div className="flex flex-col gap-2">
+            <label className={`btn btn-sm btn-outline gap-2 normal-case ${uploading ? 'loading' : ''}`}>
+              <FaCloudUploadAlt />
+              {uploading ? 'Uploading...' : 'Change Photo'}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+                disabled={uploading}
+              />
+            </label>
+            {previewUrl && (
+              <p className="text-sm text-green-600 font-medium">
+                ✓ Preview - Click "Update Profile" to save
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -257,9 +338,20 @@ const ProfilePage = () => {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-slate-500 text-sm">Last updated: {profile?.updatedAt ? new Date(profile.updatedAt).toLocaleDateString() : "Not set"}</div>
-          <button type="submit" className="btn btn-primary normal-case" disabled={uploading}>
-            <FaCheckCircle className="mr-2" /> Save Changes
+          <div className="text-slate-500 text-sm">
+            Last updated: {profile?.updatedAt ? new Date(profile.updatedAt).toLocaleDateString() : "Not set"}
+            {imageUrl && (
+              <span className="block text-green-600 font-medium">
+                ✓ Profile image uploaded and ready to save
+              </span>
+            )}
+          </div>
+          <button
+            type="submit"
+            className={`btn btn-primary normal-case ${updating ? 'loading' : ''}`}
+            disabled={uploading || updating}
+          >
+            {updating ? 'Updating...' : <><FaCheckCircle className="mr-2" /> Save Changes</>}
           </button>
         </div>
       </form>
