@@ -91,17 +91,17 @@ const AllBookingsContent = () => {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight mb-6">Admin: All Bookings</h1>
+        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight mb-6">Admin: All Bookings</h1>
         
         {/* Responsive Control Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
           
           {/* Search */}
           <div className="relative">
             <input 
               type="text" 
               placeholder="Search email/service..." 
-              className="input input-bordered w-full pl-10 rounded-xl bg-slate-50 border-none focus:bg-white transition-all"
+              className="input input-bordered w-full pl-10 rounded-xl bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600 border-none focus:bg-white dark:focus:bg-slate-600 transition-all"
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />

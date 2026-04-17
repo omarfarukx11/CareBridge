@@ -30,10 +30,10 @@ const AdminPanelPage = () => {
     const maxCount = Math.max(...data.demandingServices.map(s => s.count), 1);
 
     return (
-        <div className="max-w-7xl mx-auto font-poppins pb-20 px-4">
+        <div className="w-full font-poppins pb-20 px-4">
             <header className="mb-10">
-                <h1 className="text-3xl font-black text-slate-800 tracking-tight">Financial Overview</h1>
-                <p className="text-slate-500 font-medium">Real-time revenue tracking and service demand analytics.</p>
+                <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Financial Overview</h1>
+                <p className="text-slate-500 dark:text-slate-400 font-medium">Real-time revenue tracking and service demand analytics.</p>
             </header>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
@@ -51,9 +51,9 @@ const AdminPanelPage = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-sm">
                         <div className="flex justify-between items-center mb-8">
-                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                            <h3 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                                 <FaChartLine className="text-primary" /> Booking Velocity
                             </h3>
                             <div className="flex gap-2 items-center">
@@ -81,12 +81,12 @@ const AdminPanelPage = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm h-fit">
+                <div className="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-sm h-fit">
                     <div className="flex items-center gap-3 mb-8">
                         <div className="p-3 bg-orange-100 text-orange-500 rounded-2xl">
                             <FaFire />
                         </div>
-                        <h3 className="font-black text-slate-800 text-lg">Top Services</h3>
+                        <h3 className="font-black text-slate-800 dark:text-slate-100 text-lg">Top Services</h3>
                     </div>
                     
                     <div className="space-y-6">
@@ -101,7 +101,7 @@ const AdminPanelPage = () => {
                                         {service.count} Orders
                                     </span>
                                 </div>
-                                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                                <div className="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
                                     <div 
                                         className={`h-full rounded-full transition-all duration-1000 ease-out ${
                                             index === 0 ? 'bg-orange-500' : 'bg-primary'
@@ -113,7 +113,7 @@ const AdminPanelPage = () => {
                         ))}
                     </div>
 
-                    <div className="mt-10 p-6 bg-slate-900 rounded-4xl text-white">
+                    <div className="mt-10 p-6 bg-slate-900 dark:bg-slate-800 rounded-4xl text-white">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
                                 <FaUsers className="text-primary" />

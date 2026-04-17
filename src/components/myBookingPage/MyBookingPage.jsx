@@ -59,23 +59,23 @@ const BookingContent = () => {
   if (loading) return <div className="flex justify-center py-24"><span className="loading loading-spinner text-primary"></span></div>;
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <h1 className="text-2xl font-black text-slate-800 tracking-tight">Manage Bookings</h1>
+        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Manage Bookings</h1>
         <div className="relative w-full md:w-72">
           <input 
             type="text" 
             placeholder="Search your services..." 
-            className="input input-bordered w-full pl-10 rounded-xl bg-white focus:ring-1 focus:ring-primary"
+            className="input input-bordered w-full pl-10 rounded-xl bg-white dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 focus:ring-1 focus:ring-primary"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white border border-slate-100 rounded-xl shadow-sm">
+      <div className="overflow-x-auto bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-sm">
         <table className="table w-full">
-          <thead className="bg-slate-50/80 text-slate-500">
+          <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400">
             <tr className="border-b border-slate-100">
               <th className="py-4 font-bold text-[11px] uppercase tracking-wider">Service Details</th>
               <th className="font-bold text-[11px] uppercase tracking-wider text-center">Work Status</th>

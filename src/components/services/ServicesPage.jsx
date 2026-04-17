@@ -5,17 +5,17 @@ import Image from 'next/image'; // Import Next.js Image
 import { motion } from 'framer-motion';
 
 const ServiceSkeleton = () => (
-  <div className="bg-white rounded-xl overflow-hidden border border-slate-100 animate-pulse">
-    <div className="h-44 bg-slate-200"></div>
+  <div className="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 animate-pulse">
+    <div className="h-44 bg-slate-200 dark:bg-slate-700"></div>
     <div className="p-5 space-y-4">
-      <div className="h-5 bg-slate-200 rounded w-3/4"></div>
+      <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
       <div className="space-y-2">
-        <div className="h-2.5 bg-slate-200 rounded"></div>
-        <div className="h-2.5 bg-slate-200 rounded w-5/6"></div>
+        <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <div className="h-2.5 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
       </div>
       <div className="pt-4 flex justify-between items-center">
-        <div className="h-8 bg-slate-200 rounded w-16"></div>
-        <div className="h-8 bg-slate-200 rounded w-20"></div>
+        <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-16"></div>
+        <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-20"></div>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@ const ServiceSkeleton = () => (
 
 const ServicesPage = ({ services, isLoading }) => {
   return (
-    <div className="min-h-screen py-10 px-4 bg-slate-50">
+    <div className="min-h-screen py-10 px-4 bg-slate-50 dark:bg-slate-900">
       <div className="max-w-7xl mx-auto">
         
         <div className="text-center mb-16">
@@ -34,10 +34,10 @@ const ServicesPage = ({ services, isLoading }) => {
           >
             Care.Bridge Solutions
           </motion.span>
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 mt-6 mb-4 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-slate-100 mt-6 mb-4 tracking-tight">
             Our Care Services
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto font-medium text-sm">
+          <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium text-sm">
             Professional, verified, and compassionate care tailored for your family.
           </p>
         </div>
@@ -54,7 +54,7 @@ const ServicesPage = ({ services, isLoading }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.05 }}
-                className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 flex flex-col"
+                className="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 dark:border-slate-700 flex flex-col"
               >
                 {/* IMAGE CONTAINER */}
                 <div className="h-44 overflow-hidden relative">
@@ -74,10 +74,10 @@ const ServicesPage = ({ services, isLoading }) => {
                 </div>
                 
                 <div className="p-5 flex-1 flex flex-col">
-                  <h2 className="text-lg font-bold text-slate-800 mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2 line-clamp-1 group-hover:text-primary transition-colors">
                     {service.title}
                   </h2>
-                  <p className="text-slate-500 mb-5 line-clamp-2 text-[11px] leading-relaxed font-medium">
+                  <p className="text-slate-500 dark:text-slate-400 mb-5 line-clamp-2 text-[11px] leading-relaxed font-medium">
                     {service.description}
                   </p>
 

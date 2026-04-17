@@ -13,6 +13,8 @@ const Header = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
+
+
   const isHomePage = pathname === "/";
   
 
@@ -46,8 +48,8 @@ const Header = () => {
   if (pathname.startsWith("/register") || pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
 
   const isTransparent = isHomePage && !isScrolled;
-  const navStyles = isTransparent ? "bg-transparent py-4 border-transparent" : "bg-white shadow-md border-b border-gray-100 py-2";
-  const textColor = isTransparent ? "text-white" : "text-gray-800";
+  const navStyles = isTransparent ? "bg-transparent py-4 border-transparent" : "bg-white dark:bg-slate-900 shadow-md border-b border-slate-100 dark:border-slate-700 py-2";
+  const textColor = isTransparent ? "text-white" : "text-slate-800 dark:text-slate-100";
   const isActive = (path) => pathname === path;
 
   const navLinks = (
@@ -102,21 +104,21 @@ const Header = () => {
           {isOpen && (
             <>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsOpen(false)} className="fixed inset-0 bg-black/40 backdrop-blur-sm z-60 lg:hidden" />
-              <motion.aside initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="fixed top-0 left-0 h-full w-[75%] bg-white z-70 shadow-2xl p-6 lg:hidden flex flex-col justify-between">
+              <motion.aside initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="fixed top-0 left-0 h-full w-[75%] bg-white dark:bg-slate-900 z-70 shadow-2xl p-6 lg:hidden flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between mb-8">
                     <span className="text-xl font-bold text-primary">Care.Bridge</span>
                     <button onClick={() => setIsOpen(false)} className="btn btn-circle btn-ghost btn-sm"><HiX className="text-2xl" /></button>
                   </div>
-                  <ul className="menu menu-vertical p-0 gap-3 text-lg font-medium text-gray-800">
+                  <ul className="menu menu-vertical p-0 gap-3 text-lg font-medium text-gray-800 dark:text-slate-100">
                     {navLinks}
                   </ul>
                 </div>
                 {status === "authenticated" && (
-                  <div className="border-t border-gray-100 pt-6 space-y-4">
+                  <div className="border-t border-gray-100 dark:border-slate-700 pt-6 space-y-4">
                     <div className="flex items-center gap-3 px-2">
-                        <div className="bg-blue-50 p-2 rounded-full text-blue-600"><IoPersonOutline className="text-xl" /></div>
-                        <p className="text-sm font-bold text-gray-800 truncate">{session?.user?.name}</p>
+                        <div className="bg-blue-50 dark:bg-slate-700 p-2 rounded-full text-blue-600 dark:text-blue-400"><IoPersonOutline className="text-xl" /></div>
+                        <p className="text-sm font-bold text-gray-800 dark:text-slate-100 truncate">{session?.user?.name}</p>
                     </div>
                     {/* Add Dashboard link to mobile menu as well */}
                     <Link href={getDashboardPath()} className="w-full btn btn-primary rounded-2xl normal-case">Go to Dashboard</Link>

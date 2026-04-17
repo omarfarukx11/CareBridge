@@ -44,11 +44,11 @@ const DashboardLayout = ({ children }) => {
     }
 
     return (
-        <div className="drawer lg:drawer-open bg-slate-50 min-h-screen font-poppins w-full">
+        <div className="drawer lg:drawer-open bg-slate-50 dark:bg-slate-900 min-h-screen font-poppins w-full">
             <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
             
             <div className="drawer-content flex flex-col">
-                <div className="w-full navbar bg-white border-b border-slate-200 lg:hidden px-4 sticky top-0 z-30">
+                <div className="w-full navbar bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 lg:hidden px-4 sticky top-0 z-30">
                     <div className="flex-none">
                         <label htmlFor="dashboard-drawer" className="btn btn-ghost btn-square lg:hidden">
                             <FaBars className="text-xl" />
@@ -74,14 +74,14 @@ const DashboardLayout = ({ children }) => {
             <div className="drawer-side z-50">
                 <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
                 
-                <div className="menu p-6 w-[75%] md:w-80 min-h-full bg-slate-900 text-white flex flex-col">
+                <div className="menu p-6 w-[75%] md:w-80 min-h-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white flex flex-col border-r border-slate-200 dark:border-slate-700">
                     <Link href={'/'} className="flex items-center gap-2 text-2xl font-black mb-2 px-4">
                         <span className="text-primary">Care.</span>Bridge
                     </Link>
-                    <div className="rounded-3xl bg-slate-800 border border-white/10 p-4 mb-8">
-                        <p className="text-xs uppercase tracking-[2px] text-slate-400">Signed in as</p>
-                        <p className="mt-2 font-bold text-white truncate">{session?.user?.name || session?.user?.email}</p>
-                        <p className="text-xs text-slate-400 mt-1">{userRole === 'professional' ? 'Professional' : userRole === 'admin' ? 'Admin' : userRole === 'superadmin' ? 'Superadmin' : 'User'}</p>
+                    <div className="rounded-3xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 p-4 mb-8">
+                        <p className="text-xs uppercase tracking-[2px] text-slate-600 dark:text-slate-400">Signed in as</p>
+                        <p className="mt-2 font-bold text-slate-900 dark:text-white truncate">{session?.user?.name || session?.user?.email}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{userRole === 'professional' ? 'Professional' : userRole === 'admin' ? 'Admin' : userRole === 'superadmin' ? 'Superadmin' : 'User'}</p>
                     </div>
 
                     <ul className="space-y-2 grow">
@@ -93,7 +93,7 @@ const DashboardLayout = ({ children }) => {
                                     className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
                                         pathname === item.path 
                                         ? 'bg-primary text-white shadow-lg shadow-primary/20 font-bold' 
-                                        : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
                                     {item.icon}

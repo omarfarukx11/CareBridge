@@ -6,7 +6,7 @@ import { FaCheckCircle, FaUserShield, FaAward, FaHospitalSymbol } from "react-ic
 
 const AboutSection = () => {
   return (
-    <section className="relative py-32 bg-white overflow-hidden">
+    <section className="relative py-32 bg-white dark:bg-slate-900 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-24 items-center">
           
@@ -48,13 +48,13 @@ const AboutSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-6xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter">
+              <h2 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-slate-100 leading-[0.9] tracking-tighter">
                 We Build <br />
                 <span className="text-primary italic">The Bridge.</span>
               </h2>
             </motion.div>
 
-            <p className="text-slate-500 text-xl leading-relaxed font-medium max-w-xl">
+            <p className="text-slate-500 dark:text-slate-400 text-xl leading-relaxed font-medium max-w-xl">
               In a world where finding reliable medical help is a struggle, Care.Bridge stands as the gold standard. We don't just connect people; we verify, train, and monitor every interaction to guarantee hospital-grade care in your bedroom.
             </p>
 
@@ -67,8 +67,8 @@ const AboutSection = () => {
               ].map((item, i) => (
                 <div key={i} className="space-y-2">
                   <div className="text-primary text-2xl">{item.icon}</div>
-                  <h4 className="font-bold text-slate-900 text-lg">{item.title}</h4>
-                  <p className="text-sm text-slate-500 leading-snug">{item.desc}</p>
+                  <h4 className="font-bold text-slate-900 dark:text-slate-100 text-lg">{item.title}</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-snug">{item.desc}</p>
                 </div>
               ))}
             </div>

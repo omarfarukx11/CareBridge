@@ -98,7 +98,7 @@ const Banner = () => {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-neutral-950 h-[70vh] lg:h-screen">
+    <section className="relative w-full overflow-hidden bg-white dark:bg-neutral-950 h-[70vh] lg:h-screen">
       <AnimatePresence 
         initial={false} 
         custom={direction} 
@@ -120,7 +120,7 @@ const Banner = () => {
           }}
           className="absolute inset-0 w-full h-full lg:w-screen lg:h-screen"
         >
-          <div className="absolute inset-0 z-10 bg-linear-to-t from-neutral-950 via-black/40 to-black/10" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-white dark:from-neutral-950 via-white/40 dark:via-black/40 to-white/10 dark:to-black/10" />
           <Image
             fill
             src={displayData[currentIndex].image}
@@ -144,8 +144,8 @@ const Banner = () => {
               className="max-w-4xl"
             >
               <motion.div variants={contentVariants} className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-px bg-white/60" />
-                <span className="text-white/80 font-bold uppercase tracking-[0.2em] text-xs md:text-sm">
+                <div className="w-12 h-px bg-slate-900/60 dark:bg-white/60" />
+                <span className="text-slate-900/80 dark:text-white/80 font-bold uppercase tracking-[0.2em] text-xs md:text-sm">
                   {displayData[currentIndex].tagline}
                 </span>
               </motion.div>
@@ -153,7 +153,7 @@ const Banner = () => {
               <div className="overflow-hidden mb-10">
                 <motion.h1 
                   variants={titleVariants}
-                  className="text-4xl md:text-6xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight"
+                  className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-900 dark:text-white leading-[1.05] tracking-tight"
                 >
                    {displayData[currentIndex].title}
                 </motion.h1>
@@ -161,9 +161,9 @@ const Banner = () => {
 
               <motion.div variants={contentVariants}>
                 <Link href="/services">
-                  <button className="flex items-center gap-4 bg-white text-neutral-950 group border-none py-3 rounded-full px-10 text-lg font-bold hover:bg-neutral-100 transition-all">
+                  <button className="flex items-center gap-4 bg-blue-600 dark:bg-blue-600 text-white dark:text-white group border-none py-3 rounded-full px-10 text-lg font-bold hover:bg-blue-700 dark:hover:bg-blue-700 transition-all">
                     Explore Services
-                    <span className="bg-neutral-950/10 p-2 rounded-full group-hover:bg-neutral-950 group-hover:text-white transition-colors">
+                    <span className="bg-white/10 dark:bg-white/10 p-2 rounded-full group-hover:bg-white/20 dark:group-hover:bg-white/20 transition-colors">
                       <FaArrowRight size={18} />
                     </span>
                   </button>
@@ -179,13 +179,13 @@ const Banner = () => {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => paginate(-1)}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white backdrop-blur-md hover:bg-white hover:text-neutral-900 transition-all group"
+              className="w-12 h-12 rounded-full border border-slate-900/20 dark:border-white/20 flex items-center justify-center text-slate-900 dark:text-white backdrop-blur-md hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-slate-900 transition-all group"
             >
               <FaChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
             </button>
             <button 
               onClick={() => paginate(1)}
-              className="w-14 h-14 rounded-full bg-white text-neutral-900 flex items-center justify-center hover:bg-neutral-100 transition-all shadow-lg group"
+              className="w-14 h-14 rounded-full bg-blue-600 dark:bg-blue-600 text-white dark:text-white flex items-center justify-center hover:bg-blue-700 dark:hover:bg-blue-700 transition-all shadow-lg group"
             >
               <FaChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </button>
@@ -198,7 +198,7 @@ const Banner = () => {
               <button
                 key={i}
                 onClick={() => i !== currentIndex && paginate(i > currentIndex ? 1 : -1)}
-                className={`w-1 transition-all duration-700 rounded-full ${currentIndex === i ? 'h-12 bg-white' : 'h-6 bg-white/20 hover:bg-white/50'}`}
+                className={`w-1 transition-all duration-700 rounded-full ${currentIndex === i ? 'h-12 bg-slate-900 dark:bg-white' : 'h-6 bg-slate-900/20 dark:bg-white/20 hover:bg-slate-900/50 dark:hover:bg-white/50'}`}
               />
           ))}
       </div>

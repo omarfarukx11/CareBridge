@@ -53,7 +53,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-white dark:bg-slate-900 font-sans">
       
       {/* 1. HERO SECTION */}
       <section ref={heroRef} className="relative py-28 bg-[#0f172a] text-white overflow-hidden">
@@ -82,10 +82,10 @@ const AboutPage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-white p-8 rounded-xl shadow-xl border border-slate-100 text-center"
+              className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 text-center"
             >
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900">{stat.value}</h3>
-              <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 mt-2">{stat.label}</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100">{stat.value}</h3>
+              <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 dark:text-slate-500 mt-2">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -111,11 +111,11 @@ const AboutPage = () => {
           </motion.div>
           
           <div className="space-y-8">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
               Our Mission is to <br />
               <span className="text-primary italic">Simplify Healthcare.</span>
             </h2>
-            <p className="text-slate-600 text-lg leading-relaxed font-medium">
+            <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed font-medium">
               Care.Bridge was founded in 2024 to solve the struggle families face when finding reliable medical help. We handle the vetting, the booking, and the management.
             </p>
             <div className="space-y-4">
@@ -131,10 +131,10 @@ const AboutPage = () => {
       </section>
 
       {/* 4. CORE PILLARS SECTION (Fixed Visibility) */}
-      <section className="py-32 bg-slate-50 relative z-10">
+      <section className="py-32 bg-slate-50 dark:bg-slate-800 relative z-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-20">
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Core Pillars of Excellence</h2>
+            <h2 className="text-4xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Core Pillars of Excellence</h2>
             <div className="h-1.5 w-16 bg-primary mx-auto mt-4 rounded-full"></div>
           </div>
           
@@ -146,7 +146,7 @@ const AboutPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: i * 0.2 }}
-                className="bg-white p-10 rounded-xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 group"
+                className="bg-white dark:bg-slate-800 p-10 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-500 group"
               >
                 <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-2xl text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all">
                   {v.icon}

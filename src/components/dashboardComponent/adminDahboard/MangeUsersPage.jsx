@@ -70,21 +70,21 @@ const ManageUsersContent = () => {
     };
 
     return (
-        <div className="max-w-6xl mx-auto font-poppins">
+        <div className="w-full font-poppins">
             {/* Header Section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-3">
+                    <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-3">
                         <FaUserShield className="text-primary" /> User Management
                     </h1>
-                    <p className="text-sm text-slate-500 font-medium mt-1">Control system access and administrative privileges.</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Control system access and administrative privileges.</p>
                 </div>
                 
                 <div className="relative w-full md:w-96">
                     <input 
                         type="text" 
                         placeholder="Search by name or email..." 
-                        className="input input-bordered w-full pl-12 rounded-lg outline-none bg-white border-slate-200 focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
+                        className="input input-bordered w-full pl-12 rounded-lg outline-none bg-white dark:bg-slate-800 dark:text-slate-100 border-slate-200 dark:border-slate-700 focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
                         value={searchTerm}
                         onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
                     />
@@ -92,12 +92,12 @@ const ManageUsersContent = () => {
                 </div>
             </div>
 
-            <div className="mb-6 flex items-center gap-3 p-4 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-sm">
+            <div className="mb-6 flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-2xl border border-blue-100 dark:border-blue-800/30 text-sm">
                 <FaInfoCircle className="shrink-0" />
                 <span>Note: You cannot modify your own role to prevent accidental lockout from the Superadmin panel.</span>
             </div>
 
-            <div className="overflow-x-auto bg-white border border-slate-100 rounded-3xl shadow-sm">
+            <div className="overflow-x-auto bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl shadow-sm">
                 <table className="table w-full border-collapse">
                     <thead className="bg-slate-50/80 text-slate-500">
                         <tr className="border-b border-slate-100">

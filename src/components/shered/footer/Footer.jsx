@@ -8,7 +8,7 @@ const Footer = () => {
   const pathname = usePathname();
   if (pathname.startsWith("/register") ||pathname.startsWith("/dashboard") || pathname.startsWith("/login")) return null;
   return (
-    <footer className="bg-neutral text-base-100 border-t border-base-300">
+    <footer className="bg-neutral dark:bg-slate-800 text-base-100 dark:text-slate-100 border-t border-base-300 dark:border-slate-700">
       <div className="container px-4 py-10 max-w-7xl  mx-auto">
         <div className="footer grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           
@@ -28,7 +28,7 @@ const Footer = () => {
           </aside>
 
           <nav>
-            <header className="footer-title opacity-100 font-bold text-gray-700">Our Services</header>
+            <header className="footer-title opacity-100 font-bold text-gray-700 dark:text-slate-300">Our Services</header>
             <Link href="/service/baby-care" className="link link-hover">Baby Sitting</Link>
             <Link href="/service/elderly-care" className="link link-hover">Elderly Care</Link>
             <Link href="/service/sick-care" className="link link-hover">Sick People Service</Link>
@@ -36,7 +36,7 @@ const Footer = () => {
           </nav>
 
           <nav>
-            <header className="footer-title opacity-100 font-bold text-gray-700">Company</header>
+            <header className="footer-title opacity-100 font-bold text-gray-700 dark:text-slate-300">Company</header>
             <Link href="/about" className="link link-hover">About Us</Link>
             <Link href="/contact" className="link link-hover">Contact</Link>
             <Link href="/terms" className="link link-hover">Terms of Service</Link>
@@ -44,7 +44,7 @@ const Footer = () => {
           </nav>
 
           <nav>
-            <header className="footer-title opacity-100 font-bold text-gray-700">Contact Us</header>
+            <header className="footer-title opacity-100 font-bold text-gray-700 dark:text-slate-300">Contact Us</header>
             <div className="flex items-center gap-3 mb-2">
               <div className="bg-primary p-2 rounded-full text-white">
                 <FaPhoneAlt size={12} />
@@ -63,7 +63,7 @@ const Footer = () => {
           </nav>
         </div>
 
-        <div className="border-t border-base-300 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-70">
+        <div className="border-t border-base-300 dark:border-slate-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-70">
           <p>© {new Date().getFullYear()} Care.xyz - All rights reserved.</p>
           <div className="flex gap-4">
              <span>Security Verified</span>

@@ -45,18 +45,18 @@ const Faq = () => {
   ];
 
   return (
-    <section className="py-16 bg-base-100">
+    <section className="py-16 bg-base-100 dark:bg-slate-900">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">Frequently Asked Questions</h2>
-          <p className="text-base-content/70">Everything you need to know about our caregiving services.</p>
+          <p className="text-base-content dark:text-slate-400/70">Everything you need to know about our caregiving services.</p>
         </div>
 
         <div className="space-y-4">
           {faqData.map((faq, index) => (
             <div 
               key={index} 
-              className="collapse collapse-plus border border-base-300 rounded-xl"
+              className="collapse collapse-plus border border-base-300 dark:border-slate-700 dark:bg-slate-800 rounded-xl"
             >
               <input type="checkbox" name="my-accordion-3" /> 
               <div className="collapse-title text-xl font-medium text-primary">

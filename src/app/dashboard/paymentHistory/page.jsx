@@ -30,24 +30,24 @@ const PaymentHistory = () => {
   }
 
   return (
-    <div className=" max-w-6xl mx-auto animate-in fade-in duration-500">
+    <div className="w-full animate-in fade-in duration-500">
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-3 bg-primary/10 rounded-xl text-primary">
             <FaHistory size={24} />
           </div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight">Payment History</h1>
+          <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Payment History</h1>
         </div>
-        <p className="text-slate-500 font-medium">View and manage all your successful transactions</p>
+        <p className="text-slate-500 dark:text-slate-400 font-medium">View and manage all your successful transactions</p>
       </div>
 
       {history.length > 0 ? (
-        <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full">
               {/* Table Head */}
-              <thead className="bg-slate-50/80 text-slate-500">
-                <tr className="border-b border-slate-100">
+              <thead className="bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400">
+                <tr className="border-b border-slate-100 dark:border-slate-700">
                   <th className="py-5 px-6 font-bold text-[11px] uppercase tracking-wider">Service & Transaction</th>
                   <th className="font-bold text-[11px] uppercase tracking-wider text-center">Amount</th>
                   <th className="font-bold text-[11px] uppercase tracking-wider text-center">Date</th>

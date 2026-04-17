@@ -57,11 +57,11 @@ const ProfessionalWorkPage = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-800 tracking-tight">My Assigned Work</h1>
-          <p className="text-sm text-slate-500 mt-2">Manage your assigned work list and update each job’s progress in steps.</p>
+          <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">My Assigned Work</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Manage your assigned work list and update each job's progress in steps.</p>
         </div>
 
         <div className="relative w-full md:w-72">
@@ -70,13 +70,13 @@ const ProfessionalWorkPage = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search work list..."
-            className="input input-bordered w-full pl-10 rounded-xl bg-white focus:ring-1 focus:ring-primary"
+            className="input input-bordered w-full pl-10 rounded-xl bg-white dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 focus:ring-1 focus:ring-primary"
           />
-          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white border border-slate-100 rounded-xl shadow-sm">
+      <div className="overflow-x-auto bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-sm">
         <table className="table w-full">
           <thead className="bg-slate-50/80 text-slate-500">
             <tr className="border-b border-slate-100">

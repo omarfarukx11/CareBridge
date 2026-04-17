@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/shered/footer/Footer";
 import Header from "@/components/shered/header/Header";
 import NextAuthProvider from "@/provider/NextAuthProvider";
+import { ThemeProvider } from "@/provider/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,15 +29,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en"  data-theme="care-xyz-theme">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${poppins.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} ${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300`}
       >
-       <NextAuthProvider>
-        <Header />
-        <main >{children}</main>
-        <Footer />
-       </NextAuthProvider>
+        <ThemeProvider>
+          <NextAuthProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </NextAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

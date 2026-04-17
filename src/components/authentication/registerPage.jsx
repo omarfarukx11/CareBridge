@@ -36,8 +36,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-poppins">
-      <div className="max-w-5xl w-full bg-white rounded-lg shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4 font-poppins">
+      <div className="max-w-5xl w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
         
         <div className="hidden lg:flex bg-primary relative p-12 flex-col justify-between text-white">
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pattern-dots"></div>
@@ -56,36 +56,36 @@ const RegisterPage = () => {
 
         <div className="p-8 md:p-12 overflow-y-auto max-h-[90vh]">
           <div className="mb-6 text-center lg:text-left">
-            <h1 className="text-3xl font-black text-slate-800 mb-2">Create Account</h1>
-            <p className="text-slate-500 text-sm">Fill in your NID and contact details.</p>
+            <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-2">Create Account</h1>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Fill in your NID and contact details.</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                <div className="form-control">
-                  <label className="label text-xs font-bold text-slate-700">Full Name</label>
+                  <label className="label text-xs font-bold text-slate-700 dark:text-slate-300">Full Name</label>
                   <div className="relative">
                     <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input 
                       type="text" 
                       {...register("name", { required: "Name is required" })}
                       placeholder="John Doe" 
-                      className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 border-slate-200" 
+                      className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" 
                     />
                   </div>
                   {errors.name && <span className="text-error text-[10px] mt-1">{errors.name.message}</span>}
                 </div>
 
                 <div className="form-control">
-                  <label className="label text-xs font-bold text-slate-700">NID Number</label>
+                  <label className="label text-xs font-bold text-slate-700 dark:text-slate-300">NID Number</label>
                   <div className="relative">
                     <FaIdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input 
                       type="number" 
                       {...register("nid", { required: "NID is required", minLength: {value: 10, message: "Invalid NID"} })}
                       placeholder="1234567890" 
-                      className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 border-slate-200" 
+                      className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" 
                     />
                   </div>
                   {errors.nid && <span className="text-error text-[10px] mt-1">{errors.nid.message}</span>}
@@ -93,33 +93,33 @@ const RegisterPage = () => {
             </div>
 
             <div className="form-control">
-              <label className="label text-xs font-bold text-slate-700">Email Address</label>
+              <label className="label text-xs font-bold text-slate-700 dark:text-slate-300">Email Address</label>
               <div className="relative">
                 <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
                   type="email" 
                   {...register("email", { required: "Email is required" })}
                   placeholder="john@example.com" 
-                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 border-slate-200" 
+                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" 
                 />
               </div>
             </div>
 
             <div className="form-control">
-              <label className="label text-xs font-bold text-slate-700">Contact Number</label>
+              <label className="label text-xs font-bold text-slate-700 dark:text-slate-300">Contact Number</label>
               <div className="relative">
                 <FaPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
                   type="tel" 
                   {...register("contact", { required: "Contact is required" })}
                   placeholder="017XXXXXXXX" 
-                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 border-slate-200" 
+                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" 
                 />
               </div>
             </div>
 
             <div className="form-control">
-              <label className="label text-xs font-bold text-slate-700">Password</label>
+              <label className="label text-xs font-bold text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative">
                 <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input 
@@ -133,7 +133,7 @@ const RegisterPage = () => {
                     }
                   })}
                   placeholder="••••••••" 
-                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 border-slate-200" 
+                  className="input input-bordered w-full border-none outline-none pl-5 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600" 
                 />
               </div>
               {errors.password && <span className="text-error text-[10px] mt-1">{errors.password.message}</span>}

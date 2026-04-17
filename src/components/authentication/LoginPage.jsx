@@ -46,9 +46,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-poppins">
-      <div className="max-w-5xl w-full bg-white rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
-        <div className="hidden lg:flex bg-slate-900 relative p-12 flex-col justify-between text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4 font-poppins">
+      <div className="max-w-5xl w-full bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+        <div className="hidden lg:flex bg-blue-600 dark:bg-slate-950 relative p-12 flex-col justify-between text-white">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
           <Link href="/" className="flex items-center gap-2 text-2xl font-black relative z-10">
             <div className="bg-primary p-2 rounded-xl text-white"><FaArrowLeft className="text-sm" /></div>
@@ -65,25 +65,25 @@ const LoginPage = () => {
 
         <div className="p-8 md:p-16 flex flex-col justify-center">
           <div className="mb-10 text-center lg:text-left">
-            <h1 className="text-3xl font-black text-slate-800 mb-2">Sign In</h1>
-            <p className="text-slate-500">Please enter your credentials to continue.</p>
+            <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-2">Sign In</h1>
+            <p className="text-slate-500 dark:text-slate-400">Please enter your credentials to continue.</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="form-control">
-              <label className="label text-sm font-bold text-slate-700">Email Address</label>
+              <label className="label text-sm font-bold text-slate-700 dark:text-slate-300">Email Address</label>
               <div className="relative">
                 <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type="email" {...register("email", { required: "Email is required" })} className="input input-bordered w-full pl-12 bg-slate-50 border-none" />
+                <input type="email" {...register("email", { required: "Email is required" })} className="input input-bordered w-full pl-12 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600 border-none" />
               </div>
             </div>
 
             <div className="form-control">
-              <label className="label text-sm font-bold text-slate-700">Password</label>
+              <label className="label text-sm font-bold text-slate-700 dark:text-slate-300">Password</label>
               <div className="relative">
                 <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input type={showPassword ? "text" : "password"} {...register("password", { required: "Password is required" })} className="input input-bordered w-full pl-12 bg-slate-50 border-none" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2">{showPassword ? <FaEyeSlash /> : <FaEye />}</button>
+                <input type={showPassword ? "text" : "password"} {...register("password", { required: "Password is required" })} className="input input-bordered w-full pl-12 bg-slate-50 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600 border-none" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-700 dark:text-slate-300">{showPassword ? <FaEyeSlash /> : <FaEye />}</button>
               </div>
             </div>
 
